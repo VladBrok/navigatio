@@ -1,2 +1,2 @@
-﻿var app = new Application();
-app.Run(args);
+﻿var app = new Application(args);
+app.Run();

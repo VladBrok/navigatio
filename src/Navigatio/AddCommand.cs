@@ -1,9 +1,13 @@
 using System.Diagnostics;
-using System.Text.Json;
 
 public class AddCommand : IExecutable, ICancellable
 {
-    private readonly string _file = "aliases.json";
+    private readonly AliasesStorage _storage;
+
+    public AddCommand(AliasesStorage storage)
+    {
+        _storage = storage;
+    }
 
     public string? Alias { get; set; }
     public string? OldPath { get; set; }
@@ -26,7 +30,7 @@ public class AddCommand : IExecutable, ICancellable
             return;
         }
 
-        Dictionary<string, string> aliases = LoadAliases();
+        Dictionary<string, string> aliases = _storage.Load();
         string alias = args[0];
 
         if (!aliases.TryAdd(alias, path))
@@ -36,14 +40,14 @@ public class AddCommand : IExecutable, ICancellable
         }
 
         Alias = alias;
-        Save(aliases);
+        _storage.Save(aliases);
     }
 
     public void Cancel()
     {
         Debug.Assert(Alias is not null);
 
-        Dictionary<string, string> aliases = LoadAliases();
+        Dictionary<string, string> aliases = _storage.Load();
         if (OldPath is null)
         {
             aliases.Remove(Alias);
@@ -52,25 +56,6 @@ public class AddCommand : IExecutable, ICancellable
         {
             aliases[Alias] = OldPath;
         }
-        Save(aliases);
-    }
-
-    private void Save(Dictionary<string, string> aliases)
-    {
-        var writer = new StreamWriter(_file);
-        string resultJson = JsonSerializer.Serialize<Dictionary<string, string>>(aliases);
-        writer.WriteLine(resultJson);
-    }
-
-    private Dictionary<string, string> LoadAliases()
-    {
-        var aliases = new Dictionary<string, string>();
-        using var reader = new StreamReader(_file);
-        string json = reader.ReadToEnd();
-        if (!string.IsNullOrEmpty(json))
-        {
-            aliases = JsonSerializer.Deserialize<Dictionary<string, string>>(json)!;
-        }
-        return aliases;
+        _storage.Save(aliases);
     }
 }
