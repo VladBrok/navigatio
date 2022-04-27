@@ -41,6 +41,7 @@ public class MoveCommand : IExecutable, ICancellable
         }
 
         using var writer = new StreamWriter(_outputFile);
+        writer.WriteLine("#!/usr/bin/env");
         writer.WriteLine($"cd {path}");
     }
 }

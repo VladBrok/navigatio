@@ -7,6 +7,10 @@ public class AliasesStorage
     public AliasesStorage(string file)
     {
         _file = file;
+        if (!File.Exists(file))
+        {
+            using var _ = File.Create(file);
+        }
     }
 
     public void Save(Dictionary<string, string> aliases)
