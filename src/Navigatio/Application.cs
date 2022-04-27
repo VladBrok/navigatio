@@ -1,5 +1,3 @@
-using System.Reflection;
-
 public class Application
 {
     private readonly Dictionary<string, IExecutable> _commands;
@@ -16,8 +14,8 @@ public class Application
             ["--add"] = new AddCommand(storage),
             ["--del"] = new DeleteCommand(storage),
             ["--move"] = new MoveCommand(outputFile: "output.sh", storage),
+            ["--show"] = new ShowCommand(storage),
             // ["--undo"] = new UndoCommand(),
-            //["--show"] = new ShowCommand()
         };
     }
 
