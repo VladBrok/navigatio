@@ -1,5 +1,6 @@
 using System.Diagnostics;
-using System.Text.RegularExpressions;
+
+namespace Navigatio.Commands;
 
 public class MoveCommand : IExecutable, ICancellable
 {

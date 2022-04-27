@@ -1,3 +1,7 @@
+using Navigatio.Commands;
+
+namespace Navigatio;
+
 public class Application
 {
     private readonly Dictionary<string, IExecutable> _commands;

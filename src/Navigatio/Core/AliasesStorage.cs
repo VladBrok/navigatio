@@ -1,5 +1,7 @@
 using System.Text.Json;
 
+namespace Navigatio;
+
 public class AliasesStorage
 {
     private readonly string _file;
@@ -15,7 +17,7 @@ public class AliasesStorage
 
     public void Save(Dictionary<string, string> aliases)
     {
-        string json = JsonSerializer.Serialize<Dictionary<string, string>>(aliases);
+        string json = JsonSerializer.Serialize(aliases);
         using var writer = new StreamWriter(_file);
         writer.WriteLine(json);
     }

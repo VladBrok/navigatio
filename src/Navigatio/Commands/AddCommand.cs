@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
+namespace Navigatio.Commands;
+
 public class AddCommand : IExecutable, ICancellable
 {
     private readonly AliasesStorage _storage;
@@ -23,7 +25,7 @@ public class AddCommand : IExecutable, ICancellable
         string path = args[1];
         try
         {
-            Directory.CreateDirectory(path);
+            _ = Directory.CreateDirectory(path);
         }
         catch
         {
@@ -51,7 +53,7 @@ public class AddCommand : IExecutable, ICancellable
         Dictionary<string, string> aliases = _storage.Load();
         if (OldPath is null)
         {
-            aliases.Remove(Alias);
+            _ = aliases.Remove(Alias);
         }
         else
         {
