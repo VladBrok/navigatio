@@ -23,6 +23,7 @@ public class DeleteCommand : IExecutable, ICancellable
         Dictionary<string, string> aliases = _storage.Load();
         if (!aliases.ContainsKey(alias))
         {
+            Console.WriteLine($"Alias '{alias}' not found.");
             return;
         }
 

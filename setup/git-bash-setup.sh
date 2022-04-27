@@ -8,6 +8,7 @@ cp index.sh $ROOT
 cp -r ${EXE_PATH}. $ROOT
 chmod +x ${ROOT}/index.sh
 
-echo "" >> ~/.bashrc
-echo "alias nav='source ${ROOT}/index.sh'" >> ~/.bashrc
-source ~/.bashrc
+# Uncomment to create an alias
+#echo "" >> ~/.bashrc
+#echo "alias nav='source ${ROOT}/index.sh ${ROOT}/'" >> ~/.bashrc
+#source ~/.bashrc
