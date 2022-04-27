@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 public class AddCommand : IExecutable, ICancellable
 {
@@ -14,7 +15,7 @@ public class AddCommand : IExecutable, ICancellable
 
     public void Execute(params string[] args)
     {
-        if (args.Length < 2 || args[0].StartsWith("-"))
+        if (args.Length < 2 || args[0].StartsWith("-") || Regex.IsMatch(args[0], @"\/"))
         {
             throw new CommandUsageException();
         }

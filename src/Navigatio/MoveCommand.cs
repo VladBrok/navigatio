@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 public class MoveCommand : IExecutable, ICancellable
 {
@@ -34,6 +35,14 @@ public class MoveCommand : IExecutable, ICancellable
 
     private void MoveTo(string alias)
     {
+        string? subFolder = null;
+        int slash = alias.IndexOf("/");
+        if (slash != -1)
+        {
+            subFolder = alias[slash..];
+            alias = alias[..slash];
+        }
+
         if (!_storage.Load().TryGetValue(alias, out string? path))
         {
             Console.WriteLine($"Alias '{alias}' not found.");
@@ -42,6 +51,6 @@ public class MoveCommand : IExecutable, ICancellable
 
         using var writer = new StreamWriter(_outputFile);
         writer.WriteLine("#!/usr/bin/env");
-        writer.WriteLine($"cd {path}");
+        writer.WriteLine($"cd {(subFolder is null ? path : Path.Join(path, subFolder))}");
     }
 }
