@@ -3,11 +3,11 @@ using System.Text.RegularExpressions;
 
 namespace Navigatio.Commands;
 
-public class AddCommand : IExecutable, ICancellable
+public class Add : IExecutable, ICancellable
 {
     private readonly AliasesStorage _storage;
 
-    public AddCommand(AliasesStorage storage)
+    public Add(AliasesStorage storage)
     {
         _storage = storage;
     }

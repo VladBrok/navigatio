@@ -10,11 +10,11 @@ public class Commander
     {
         _commands = new Dictionary<string, IExecutable>
         {
-            ["--add"] = new AddCommand(storage),
-            ["--del"] = new DeleteCommand(storage),
-            ["--move"] = new MoveCommand(shellOutputFile, storage),
-            ["--show"] = new ShowCommand(storage),
-            ["--undo"] = new UndoCommand(this, history),
+            ["--add"] = new Add(storage),
+            ["--del"] = new Delete(storage),
+            ["--move"] = new Move(shellOutputFile, storage),
+            ["--show"] = new Show(storage),
+            ["--undo"] = new Undo(this, history),
         };
     }
 

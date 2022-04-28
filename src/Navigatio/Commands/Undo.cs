@@ -1,11 +1,11 @@
 namespace Navigatio.Commands;
 
-public class UndoCommand : IExecutable
+public class Undo : IExecutable
 {
     private readonly Commander _commander;
     private readonly History _history;
 
-    public UndoCommand(Commander commander, History history)
+    public Undo(Commander commander, History history)
     {
         _commander = commander;
         _history = history;

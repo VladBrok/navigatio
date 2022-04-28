@@ -1,10 +1,10 @@
 namespace Navigatio.Commands;
 
-public class ShowCommand : IExecutable
+public class Show : IExecutable
 {
     private readonly AliasesStorage _storage;
 
-    public ShowCommand(AliasesStorage storage)
+    public Show(AliasesStorage storage)
     {
         _storage = storage;
     }

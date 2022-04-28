@@ -2,12 +2,12 @@ using System.Diagnostics;
 
 namespace Navigatio.Commands;
 
-public class MoveCommand : IExecutable, ICancellable
+public class Move : IExecutable, ICancellable
 {
     private readonly string _outputFile;
     private readonly AliasesStorage _storage;
 
-    public MoveCommand(string outputFile, AliasesStorage storage)
+    public Move(string outputFile, AliasesStorage storage)
     {
         _outputFile = outputFile;
         _storage = storage;

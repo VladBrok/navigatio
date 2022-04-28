@@ -1,10 +1,10 @@
 namespace Navigatio.Commands;
 
-public class DeleteCommand : IExecutable, ICancellable
+public class Delete : IExecutable, ICancellable
 {
     private readonly AliasesStorage _storage;
 
-    public DeleteCommand(AliasesStorage storage)
+    public Delete(AliasesStorage storage)
     {
         _storage = storage;
     }
