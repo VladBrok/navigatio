@@ -7,10 +7,12 @@ namespace Navigatio;
 public class History
 {
     private readonly string _file;
+    private readonly string EmptyHistoryMessage;
 
     public History(string file)
     {
         _file = file;
+        EmptyHistoryMessage = "Nothing to undo. Command history is empty.";
     }
 
     public void Push(string name, IExecutable command)
@@ -44,6 +46,12 @@ public class History
 
     public ICancellable? Pop(Func<string, IExecutable> getCommand)
     {
+        if (!File.Exists(_file))
+        {
+            Console.WriteLine(EmptyHistoryMessage);
+            return null;
+        }
+
         Stack<(string, JObject)> history;
 
         using (var reader = new StreamReader(_file))
@@ -53,7 +61,7 @@ public class History
                 JsonConvert.DeserializeObject<Stack<(string, JObject)>>(json)!);
             if (!history.Any())
             {
-                Console.WriteLine("Nothing to undo. Command history is empty.");
+                Console.WriteLine(EmptyHistoryMessage);
                 return null;
             }
         }

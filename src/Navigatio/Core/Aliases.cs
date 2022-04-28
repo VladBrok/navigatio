@@ -2,11 +2,11 @@ using System.Text.Json;
 
 namespace Navigatio;
 
-public class AliasesStorage
+public class Aliases
 {
     private readonly string _file;
 
-    public AliasesStorage(string file)
+    public Aliases(string file)
     {
         _file = file;
     }

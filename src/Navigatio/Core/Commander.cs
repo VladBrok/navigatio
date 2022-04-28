@@ -6,14 +6,14 @@ public class Commander
 {
     private readonly Dictionary<string, IExecutable> _commands;
 
-    public Commander(AliasesStorage storage, History history, string shellOutputFile)
+    public Commander(Aliases aliases, History history, string shellOutputFile)
     {
         _commands = new Dictionary<string, IExecutable>
         {
-            ["--add"] = new Add(storage),
-            ["--del"] = new Delete(storage),
-            ["--move"] = new Move(shellOutputFile, storage),
-            ["--show"] = new Show(storage),
+            ["--add"] = new Add(aliases),
+            ["--del"] = new Delete(aliases),
+            ["--move"] = new Move(shellOutputFile, aliases),
+            ["--show"] = new Show(aliases),
             ["--undo"] = new Undo(this, history),
         };
     }

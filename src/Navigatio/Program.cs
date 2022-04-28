@@ -3,10 +3,9 @@ using static System.IO.Path;
 
 // TODO: 
 // fix history saving when command didn't complete
-// fix error when history.json is empty
 // find out WHY System json DOES NOT SERIALIZE tuples
 // add help
-// refactor code duplication
+// refactor code duplication (aliases, history, aliases & history)
 
 
 // var stack = new Stack<(string, int)>();
@@ -20,7 +19,7 @@ using static System.IO.Path;
 
 string exePath = AppContext.BaseDirectory;
 
-var storage = new AliasesStorage(Join(exePath, "aliases.json"));
+var storage = new Aliases(Join(exePath, "aliases.json"));
 var history = new History(Join(exePath, "history.json"));
 var commander = new Commander(storage, history, Join(exePath, "output.sh"));
 

@@ -2,9 +2,9 @@ namespace Navigatio.Commands;
 
 public class Show : IExecutable
 {
-    private readonly AliasesStorage _storage;
+    private readonly Aliases _storage;
 
-    public Show(AliasesStorage storage)
+    public Show(Aliases storage)
     {
         _storage = storage;
     }

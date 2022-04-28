@@ -5,9 +5,9 @@ namespace Navigatio.Commands;
 public class Move : IExecutable, ICancellable
 {
     private readonly string _outputFile;
-    private readonly AliasesStorage _storage;
+    private readonly Aliases _storage;
 
-    public Move(string outputFile, AliasesStorage storage)
+    public Move(string outputFile, Aliases storage)
     {
         _outputFile = outputFile;
         _storage = storage;

@@ -5,9 +5,9 @@ namespace Navigatio.Commands;
 
 public class Add : IExecutable, ICancellable
 {
-    private readonly AliasesStorage _storage;
+    private readonly Aliases _storage;
 
-    public Add(AliasesStorage storage)
+    public Add(Aliases storage)
     {
         _storage = storage;
     }
