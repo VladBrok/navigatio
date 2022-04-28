@@ -25,7 +25,7 @@ public class AddCommand : IExecutable, ICancellable
         string path = args[1];
         try
         {
-            _ = Directory.CreateDirectory(path);
+            Directory.CreateDirectory(path);
         }
         catch
         {
@@ -53,12 +53,13 @@ public class AddCommand : IExecutable, ICancellable
         Dictionary<string, string> aliases = _storage.Load();
         if (OldPath is null)
         {
-            _ = aliases.Remove(Alias);
+            aliases.Remove(Alias);
         }
         else
         {
             aliases[Alias] = OldPath;
         }
+
         _storage.Save(aliases);
     }
 }

@@ -4,45 +4,22 @@ namespace Navigatio;
 
 public class Application
 {
-    private readonly Dictionary<string, IExecutable> _commands;
     private string[] _args;
+    private readonly Commander _commander;
+    private readonly History _history;
 
-    public Application(string[] args)
+    public Application(string[] args, Commander commander, History history)
     {
         Directory.SetCurrentDirectory(AppContext.BaseDirectory);
-
         _args = args;
-        var storage = new AliasesStorage("aliases.json");
-        _commands = new Dictionary<string, IExecutable>
-        {
-            ["--add"] = new AddCommand(storage),
-            ["--del"] = new DeleteCommand(storage),
-            ["--move"] = new MoveCommand(outputFile: "output.sh", storage),
-            ["--show"] = new ShowCommand(storage),
-            // ["--undo"] = new UndoCommand(),
-        };
+        _commander = commander;
+        _history = history;
     }
 
     public void Run()
     {
-        if (!_args.Any())
-        {
-            Console.WriteLine("no args.");
-            return;
-        }
-
-        IExecutable command = GetCommand(_args[0]);
+        IExecutable command = _commander.Get(ref _args);
         command.Execute(_args[1..]);
-    }
-
-    public IExecutable GetCommand(string name)
-    {
-        if (_commands.TryGetValue(name, out IExecutable? c))
-        {
-            return c;
-        }
-
-        _args = _args.Prepend("--move").ToArray();
-        return _commands["--move"];
+        _history.Push(_args[0], command);
     }
 }

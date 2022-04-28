@@ -13,7 +13,7 @@ public class MoveCommand : IExecutable, ICancellable
         _storage = storage;
     }
 
-    public string? OldAlias { get; set; }
+    public string? OldPath { get; set; }
 
     public void Execute(params string[] args)
     {
@@ -23,18 +23,18 @@ public class MoveCommand : IExecutable, ICancellable
         }
 
         string alias = args[0];
-        MoveTo(alias);
-        OldAlias = alias;
+        MoveToAlias(alias);
+        OldPath = alias;
     }
 
     public void Cancel()
     {
-        Debug.Assert(OldAlias is not null);
+        Debug.Assert(OldPath is not null);
 
-        MoveTo(OldAlias);
+        MoveToPath(OldPath);
     }
 
-    private void MoveTo(string alias)
+    private void MoveToAlias(string alias)
     {
         string? subFolder = null;
         int slash = alias.IndexOf("/");
@@ -50,8 +50,13 @@ public class MoveCommand : IExecutable, ICancellable
             return;
         }
 
+        MoveToPath(subFolder is null ? path : Path.Join(path, subFolder));
+    }
+
+    private void MoveToPath(string path)
+    {
         using var writer = new StreamWriter(_outputFile);
         writer.WriteLine("#!/usr/bin/env");
-        writer.WriteLine($"cd {(subFolder is null ? path : Path.Join(path, subFolder))}");
+        writer.WriteLine($"cd {path}");
     }
 }

@@ -9,10 +9,6 @@ public class AliasesStorage
     public AliasesStorage(string file)
     {
         _file = file;
-        if (!File.Exists(file))
-        {
-            using var _ = File.Create(file);
-        }
     }
 
     public void Save(Dictionary<string, string> aliases)
@@ -24,10 +20,15 @@ public class AliasesStorage
 
     public Dictionary<string, string> Load()
     {
+        // TODO: remove code duplication with History.cs
+        if (!File.Exists(_file))
+        {
+            using var _ = File.Create(_file);
+            return new Dictionary<string, string>();
+        }
+
         using var reader = new StreamReader(_file);
         string json = reader.ReadToEnd();
-        return string.IsNullOrEmpty(json)
-               ? new Dictionary<string, string>()
-               : JsonSerializer.Deserialize<Dictionary<string, string>>(json)!;
+        return JsonSerializer.Deserialize<Dictionary<string, string>>(json)!;
     }
 }
