@@ -23,8 +23,8 @@ public class MoveCommand : IExecutable, ICancellable
         }
 
         string alias = args[0];
+        OldPath = Directory.GetCurrentDirectory().Replace('\\', '/');
         MoveToAlias(alias);
-        OldPath = alias;
     }
 
     public void Cancel()

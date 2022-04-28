@@ -1,8 +1,9 @@
 ﻿using Navigatio;
-using Newtonsoft.Json;
+using static System.IO.Path;
 
 // TODO: 
 // fix history saving when command didn't complete
+// fix error when history.json is empty
 // find out WHY System json DOES NOT SERIALIZE tuples
 // add help
 // refactor code duplication
@@ -17,8 +18,11 @@ using Newtonsoft.Json;
 // stack = new Stack<(string, int)>(JsonConvert.DeserializeObject<Stack<(string, int)>>(json));
 // System.Console.WriteLine(JsonConvert.SerializeObject(stack));
 
-var storage = new AliasesStorage("aliases.json");
-var history = new History("history.json");
-var commander = new Commander(storage, history);
+string exePath = AppContext.BaseDirectory;
+
+var storage = new AliasesStorage(Join(exePath, "aliases.json"));
+var history = new History(Join(exePath, "history.json"));
+var commander = new Commander(storage, history, Join(exePath, "output.sh"));
+
 var app = new Application(args, commander, history);
 app.Run();

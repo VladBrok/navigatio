@@ -10,7 +10,6 @@ public class Application
 
     public Application(string[] args, Commander commander, History history)
     {
-        Directory.SetCurrentDirectory(AppContext.BaseDirectory);
         _args = args;
         _commander = commander;
         _history = history;
