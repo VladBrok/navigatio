@@ -2,8 +2,7 @@
 using static System.IO.Path;
 
 // TODO:
-// find out WHY System json DOES NOT SERIALIZE tuples
-// refactor code duplication (aliases, history, aliases & history)
+// refactor code duplication (aliases & history)
 // add help
 
 

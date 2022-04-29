@@ -15,57 +15,46 @@ public class History
 
     public void Push(string name, ICancellable command)
     {
-        // TODO: Remove code duplication with AliasesStorage class and Pop method
-        Stack<(string, object)> history;
-
-        if (!File.Exists(_file))
-        {
-            using var _ = File.Create(_file);
-            history = new Stack<(string, object)>();
-        }
-        else
-        {
-            using var reader = new StreamReader(_file);
-            string json = reader.ReadToEnd();
-            history = new Stack<(string, object)>(
-                JsonConvert.DeserializeObject<Stack<(string, object)>>(json)!);
-        }
-
+        Stack<(string, object)> history = Load<object>();
         history.Push((name, command));
-
-        string resultJson = JsonConvert.SerializeObject(history);
-        using var writer = new StreamWriter(_file);
-        writer.WriteLine(resultJson);
+        Save(history);
     }
 
     public ICancellable? Pop(Func<string, IExecutable> getCommand)
     {
-        if (!File.Exists(_file))
+        Stack<(string, JObject)> history = Load<JObject>();
+        if (!history.Any())
         {
             return null;
-        }
-
-        Stack<(string, JObject)> history;
-
-        using (var reader = new StreamReader(_file))
-        {
-            string json = reader.ReadToEnd();
-            history = new Stack<(string, JObject)>(
-                JsonConvert.DeserializeObject<Stack<(string, JObject)>>(json)!);
-            if (!history.Any())
-            {
-                return null;
-            }
         }
 
         (string name, JObject data) = history.Pop();
         var command = (ICancellable)getCommand(name);
         JsonConvert.PopulateObject(data.ToString(), command);
 
-        string resultJson = JsonConvert.SerializeObject(history);
-        using var writer = new StreamWriter(_file);
-        writer.WriteLine(resultJson);
-
+        Save(history);
         return command;
+    }
+
+    // TODO: Remove code duplication with Aliases class
+    private void Save<T>(Stack<(string, T)> history)
+    {
+        string json = JsonConvert.SerializeObject(history);
+        using var writer = new StreamWriter(_file);
+        writer.WriteLine(json);
+    }
+
+    private Stack<(string, T)> Load<T>()
+    {
+        if (!File.Exists(_file))
+        {
+            using var _ = File.Create(_file);
+            return new Stack<(string, T)>();
+        }
+
+        using var reader = new StreamReader(_file);
+        string json = reader.ReadToEnd();
+        return new Stack<(string, T)>(
+            JsonConvert.DeserializeObject<Stack<(string, T)>>(json)!);
     }
 }
