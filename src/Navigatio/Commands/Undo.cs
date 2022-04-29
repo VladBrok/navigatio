@@ -13,6 +13,13 @@ public class Undo : IExecutable
 
     public void Execute(params string[] _)
     {
-        _history.Pop(_commander.Get)?.Cancel();
+        ICancellable? last = _history.Pop(_commander.Get);
+        if (last is null)
+        {
+            Console.WriteLine("Nothing to undo. Command history is empty.");
+            return;
+        }
+
+        last.Cancel();
     }
 }

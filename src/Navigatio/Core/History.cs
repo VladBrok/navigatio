@@ -7,12 +7,10 @@ namespace Navigatio;
 public class History
 {
     private readonly string _file;
-    private readonly string EmptyHistoryMessage;
 
     public History(string file)
     {
         _file = file;
-        EmptyHistoryMessage = "Nothing to undo. Command history is empty.";
     }
 
     public void Push(string name, IExecutable command)
@@ -24,6 +22,7 @@ public class History
 
         // TODO: Remove code duplication with AliasesStorage class and Pop method
         Stack<(string, object)> history;
+
         if (!File.Exists(_file))
         {
             using var _ = File.Create(_file);
@@ -48,7 +47,6 @@ public class History
     {
         if (!File.Exists(_file))
         {
-            Console.WriteLine(EmptyHistoryMessage);
             return null;
         }
 
@@ -61,7 +59,6 @@ public class History
                 JsonConvert.DeserializeObject<Stack<(string, JObject)>>(json)!);
             if (!history.Any())
             {
-                Console.WriteLine(EmptyHistoryMessage);
                 return null;
             }
         }

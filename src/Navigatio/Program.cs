@@ -2,7 +2,6 @@
 using static System.IO.Path;
 
 // TODO:
-// message 'nothing to undo' is in the History ????
 // fix history saving when command didn't complete
 // find out WHY System json DOES NOT SERIALIZE tuples
 // add help
