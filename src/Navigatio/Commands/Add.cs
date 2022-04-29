@@ -15,7 +15,7 @@ public class Add : IExecutable, ICancellable
     public string? Alias { get; set; }
     public string? OldPath { get; set; }
 
-    public void Execute(params string[] args)
+    public bool Execute(params string[] args)
     {
         if (args.Length < 2 || args[0].StartsWith("-") || Regex.IsMatch(args[0], @"\/"))
         {
@@ -30,7 +30,7 @@ public class Add : IExecutable, ICancellable
         catch
         {
             Console.WriteLine($"Path '{path}' is invalid.");
-            return;
+            return false;
         }
 
         Dictionary<string, string> aliases = _storage.Load();
@@ -44,6 +44,7 @@ public class Add : IExecutable, ICancellable
 
         Alias = alias;
         _storage.Save(aliases);
+        return true;
     }
 
     public void Cancel()

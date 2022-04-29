@@ -13,13 +13,8 @@ public class History
         _file = file;
     }
 
-    public void Push(string name, IExecutable command)
+    public void Push(string name, ICancellable command)
     {
-        if (command is not ICancellable)
-        {
-            return;
-        }
-
         // TODO: Remove code duplication with AliasesStorage class and Pop method
         Stack<(string, object)> history;
 

@@ -18,7 +18,10 @@ public class Application
     public void Run()
     {
         IExecutable command = _commander.Get(ref _args);
-        command.Execute(_args[1..]);
-        _history.Push(_args[0], command);
+        bool executed = command.Execute(_args[1..]);
+        if (executed && command is ICancellable c)
+        {
+            _history.Push(_args[0], c);
+        }
     }
 }

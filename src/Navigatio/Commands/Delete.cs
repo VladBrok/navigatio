@@ -12,7 +12,7 @@ public class Delete : IExecutable, ICancellable
     public string? Alias { get; set; }
     public string? Path { get; set; }
 
-    public void Execute(params string[] args)
+    public bool Execute(params string[] args)
     {
         if (args.Length < 1)
         {
@@ -24,13 +24,14 @@ public class Delete : IExecutable, ICancellable
         if (!aliases.ContainsKey(alias))
         {
             Console.WriteLine($"Alias '{alias}' not found.");
-            return;
+            return false;
         }
 
         Alias = alias;
         Path = aliases[alias];
         aliases.Remove(alias);
         _storage.Save(aliases);
+        return true;
     }
 
     public void Cancel()

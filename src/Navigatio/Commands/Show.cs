@@ -9,12 +9,13 @@ public class Show : IExecutable
         _storage = storage;
     }
 
-    public void Execute(params string[] _)
+    public bool Execute(params string[] _)
     {
         Console.WriteLine();
         foreach (var alias in _storage.Load())
         {
             Console.WriteLine($"  {alias.Key}  ->  {alias.Value}");
         }
+        return true;
     }
 }

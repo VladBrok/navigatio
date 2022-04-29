@@ -15,7 +15,7 @@ public class Move : IExecutable, ICancellable
 
     public string? OldPath { get; set; }
 
-    public void Execute(params string[] args)
+    public bool Execute(params string[] args)
     {
         if (args.Length < 1)
         {
@@ -24,7 +24,7 @@ public class Move : IExecutable, ICancellable
 
         string alias = args[0];
         OldPath = Directory.GetCurrentDirectory().Replace('\\', '/');
-        MoveToAlias(alias);
+        return MoveToAlias(alias);
     }
 
     public void Cancel()
@@ -34,7 +34,7 @@ public class Move : IExecutable, ICancellable
         MoveToPath(OldPath);
     }
 
-    private void MoveToAlias(string alias)
+    private bool MoveToAlias(string alias)
     {
         string? subFolder = null;
         int slash = alias.IndexOf("/");
@@ -47,10 +47,11 @@ public class Move : IExecutable, ICancellable
         if (!_storage.Load().TryGetValue(alias, out string? path))
         {
             Console.WriteLine($"Alias '{alias}' not found.");
-            return;
+            return false;
         }
 
         MoveToPath(subFolder is null ? path : Path.Join(path, subFolder));
+        return true;
     }
 
     private void MoveToPath(string path)

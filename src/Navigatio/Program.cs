@@ -2,10 +2,9 @@
 using static System.IO.Path;
 
 // TODO:
-// fix history saving when command didn't complete
 // find out WHY System json DOES NOT SERIALIZE tuples
-// add help
 // refactor code duplication (aliases, history, aliases & history)
+// add help
 
 
 // var stack = new Stack<(string, int)>();
