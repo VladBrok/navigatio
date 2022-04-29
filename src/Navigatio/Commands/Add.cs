@@ -34,17 +34,18 @@ public class Add : IExecutable, ICancellable
             return false;
         }
 
-        var aliases = _aliasStorage.Load<Dictionary<string, string>>();
         string alias = args[0];
-
-        if (!aliases.TryAdd(alias, path))
+        _aliasStorage.Load<Dictionary<string, string>>(aliases =>
         {
+            if (aliases.TryAdd(alias, path))
+            {
+                return;
+            }
             OldPath = aliases[alias];
             aliases[alias] = path;
-        }
+        });
 
         Alias = alias;
-        _aliasStorage.Save(aliases);
         return true;
     }
 
@@ -52,16 +53,16 @@ public class Add : IExecutable, ICancellable
     {
         Debug.Assert(Alias is not null);
 
-        var aliases = _aliasStorage.Load<Dictionary<string, string>>();
-        if (OldPath is null)
+        _aliasStorage.Load<Dictionary<string, string>>(aliases =>
         {
-            aliases.Remove(Alias);
-        }
-        else
-        {
-            aliases[Alias] = OldPath;
-        }
-
-        _aliasStorage.Save(aliases);
+            if (OldPath is null)
+            {
+                aliases.Remove(Alias);
+            }
+            else
+            {
+                aliases[Alias] = OldPath;
+            }
+        });
     }
 }

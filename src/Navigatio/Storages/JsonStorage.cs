@@ -5,20 +5,27 @@ namespace Navigatio.Storages;
 public class JsonStorage : IStorage
 {
     private readonly string _file;
+    private readonly JsonSerializerSettings _settings;
 
     public JsonStorage(string file)
     {
         _file = file;
+        _settings = new()
+        {
+            NullValueHandling = NullValueHandling.Ignore
+        };
     }
 
-    public void Save<T>(T data)
+    public void Load<T>(Action<T> callback)
+        where T : new()
     {
-        string json = JsonConvert.SerializeObject(data);
-        using var writer = new StreamWriter(_file);
-        writer.WriteLine(json);
+        var data = Load<T>();
+        callback(data);
+        Save(data);
     }
 
-    public T Load<T>() where T : new()
+    private T Load<T>()
+        where T : new()
     {
         if (!File.Exists(_file))
         {
@@ -28,6 +35,13 @@ public class JsonStorage : IStorage
 
         using var reader = new StreamReader(_file);
         string json = reader.ReadToEnd();
-        return JsonConvert.DeserializeObject<T>(json)!;
+        return JsonConvert.DeserializeObject<T>(json, _settings)!;
+    }
+
+    private void Save<T>(T data)
+    {
+        string json = JsonConvert.SerializeObject(data, _settings);
+        using var writer = new StreamWriter(_file);
+        writer.WriteLine(json);
     }
 }

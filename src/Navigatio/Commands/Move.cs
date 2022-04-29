@@ -37,21 +37,21 @@ public class Move : IExecutable, ICancellable
 
     private bool MoveToAlias(string alias)
     {
-        string? subFolder = null;
-        int slash = alias.IndexOf("/");
-        if (slash != -1)
-        {
-            subFolder = alias[slash..];
-            alias = alias[..slash];
-        }
+        string? subfolder = ExtractSubfolder(ref alias);
+        string? path = null;
 
-        if (!_aliasStorage.Load<Dictionary<string, string>>().TryGetValue(alias, out string? path))
+        _aliasStorage.Load<Dictionary<string, string>>(aliases =>
+        {
+            aliases.TryGetValue(alias, out path);
+        });
+
+        if (path is null)
         {
             Console.WriteLine($"Alias '{alias}' not found.");
             return false;
         }
 
-        MoveToPath(subFolder is null ? path : Path.Join(path, subFolder));
+        MoveToPath(subfolder is null ? path : Path.Join(path, subfolder));
         return true;
     }
 
@@ -60,5 +60,17 @@ public class Move : IExecutable, ICancellable
         using var writer = new StreamWriter(_outputFile);
         writer.WriteLine("#!/usr/bin/env");
         writer.WriteLine($"cd {path}");
+    }
+
+    private static string? ExtractSubfolder(ref string alias)
+    {
+        string? subfolder = null;
+        int slash = alias.IndexOf("/");
+        if (slash != -1)
+        {
+            subfolder = alias[slash..];
+            alias = alias[..slash];
+        }
+        return subfolder;
     }
 }

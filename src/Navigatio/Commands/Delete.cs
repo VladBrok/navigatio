@@ -22,18 +22,20 @@ public class Delete : IExecutable, ICancellable
         }
 
         string alias = args[0];
-        var aliases = _aliasStorage.Load<Dictionary<string, string>>();
-        if (!aliases.ContainsKey(alias))
+        _aliasStorage.Load<Dictionary<string, string>>(aliases =>
         {
-            Console.WriteLine($"Alias '{alias}' not found.");
-            return false;
-        }
+            if (!aliases.ContainsKey(alias))
+            {
+                Console.WriteLine($"Alias '{alias}' not found.");
+                return;
+            }
 
-        Alias = alias;
-        Path = aliases[alias];
-        aliases.Remove(alias);
-        _aliasStorage.Save(aliases);
-        return true;
+            Alias = alias;
+            Path = aliases[alias];
+            aliases.Remove(alias);
+        });
+
+        return Alias is not null;
     }
 
     public void Cancel()
@@ -43,8 +45,9 @@ public class Delete : IExecutable, ICancellable
             return;
         }
 
-        var aliases = _aliasStorage.Load<Dictionary<string, string>>();
-        aliases.Add(Alias, Path);
-        _aliasStorage.Save(aliases);
+        _aliasStorage.Load<Dictionary<string, string>>(aliases =>
+        {
+            aliases.Add(Alias, Path);
+        });
     }
 }

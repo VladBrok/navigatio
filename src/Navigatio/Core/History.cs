@@ -16,31 +16,28 @@ public class History
 
     public void Push(string name, ICancellable command)
     {
-        var history = LoadStack<(string, object)>();
-        history.Push((name, command));
-        _storage.Save(history);
+        _storage.Load<LinkedList<(string, object)>>(history =>
+        {
+            history.AddFirst((name, command));
+        });
     }
 
     public ICancellable? Pop(Func<string, IExecutable> getCommand)
     {
-        var history = LoadStack<(string, JObject)>();
-        if (!history.Any())
+        ICancellable? command = null;
+        _storage.Load<LinkedList<(string, JObject)>>(history =>
         {
-            return null;
-        }
+            if (!history.Any())
+            {
+                return;
+            }
 
-        (string name, JObject data) = history.Pop();
-        var command = (ICancellable)getCommand(name);
-        JsonConvert.PopulateObject(data.ToString(), command);
+            (string name, JObject data) = history.First();
+            history.RemoveFirst();
+            command = (ICancellable)getCommand(name);
+            JsonConvert.PopulateObject(data.ToString(), command);
+        });
 
-        _storage.Save(history);
         return command;
-    }
-
-    private Stack<T> LoadStack<T>()
-    {
-        // Need to wrap in the new stack, because otherwise
-        // it loads in the reverse order.
-        return new Stack<T>(_storage.Load<Stack<T>>());
     }
 }

@@ -14,10 +14,13 @@ public class Show : IExecutable
     public bool Execute(params string[] _)
     {
         Console.WriteLine();
-        foreach (var alias in _aliasStorage.Load<Dictionary<string, string>>())
+        _aliasStorage.Load<Dictionary<string, string>>(aliases =>
         {
-            Console.WriteLine($"  {alias.Key}  ->  {alias.Value}");
-        }
+            foreach (var alias in aliases)
+            {
+                Console.WriteLine($"  {alias.Key}  ->  {alias.Value}");
+            }
+        });
         return true;
     }
 }

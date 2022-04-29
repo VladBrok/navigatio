@@ -1,20 +1,25 @@
 ﻿using Navigatio;
 using Navigatio.Storages;
+using Newtonsoft.Json;
 using static System.IO.Path;
 
 // TODO:
-// refactor code duplication in commands
+// fix show command output (make 2 columns)
+// do something with object and JObject in the history class
 // add help
 
 
-// var stack = new Stack<(string, int)>();
-// stack.Push(("one", 5));
-// stack.Push(("two", 2));
-// stack.Push(("three", 9));
-// string json = JsonConvert.SerializeObject(stack);
+// var settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+// var stack = new LinkedList<(string?, int)>();
+// stack.AddFirst(("one", 5));
+// stack.AddFirst(("two", 2));
+// stack.AddFirst(("three", 9));
+// stack.AddFirst((null, 9));
+// string json = JsonConvert.SerializeObject(stack, settings);
 // System.Console.WriteLine(json);
-// stack = new Stack<(string, int)>(JsonConvert.DeserializeObject<Stack<(string, int)>>(json));
+// stack = JsonConvert.DeserializeObject<LinkedList<(string, int)>>(json, settings);
 // System.Console.WriteLine(JsonConvert.SerializeObject(stack));
+
 
 string exePath = AppContext.BaseDirectory;
 
