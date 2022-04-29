@@ -1,7 +1,8 @@
 ﻿using Navigatio;
 using static System.IO.Path;
 
-// TODO: 
+// TODO:
+// message 'nothing to undo' is in the History ????
 // fix history saving when command didn't complete
 // find out WHY System json DOES NOT SERIALIZE tuples
 // add help
@@ -19,9 +20,9 @@ using static System.IO.Path;
 
 string exePath = AppContext.BaseDirectory;
 
-var storage = new Aliases(Join(exePath, "aliases.json"));
+var aliases = new Aliases(Join(exePath, "aliases.json"));
 var history = new History(Join(exePath, "history.json"));
-var commander = new Commander(storage, history, Join(exePath, "output.sh"));
+var commander = new Commander(aliases, history, Join(exePath, "output.sh"));
 
 var app = new Application(args, commander, history);
 app.Run();
