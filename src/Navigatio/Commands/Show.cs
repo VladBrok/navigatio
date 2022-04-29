@@ -1,18 +1,20 @@
+using Navigatio.Storages;
+
 namespace Navigatio.Commands;
 
 public class Show : IExecutable
 {
-    private readonly Aliases _storage;
+    private readonly IStorage _aliasStorage;
 
-    public Show(Aliases storage)
+    public Show(IStorage aliasStorage)
     {
-        _storage = storage;
+        _aliasStorage = aliasStorage;
     }
 
     public bool Execute(params string[] _)
     {
         Console.WriteLine();
-        foreach (var alias in _storage.Load())
+        foreach (var alias in _aliasStorage.Load<Dictionary<string, string>>())
         {
             Console.WriteLine($"  {alias.Key}  ->  {alias.Value}");
         }

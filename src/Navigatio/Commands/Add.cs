@@ -1,15 +1,16 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using Navigatio.Storages;
 
 namespace Navigatio.Commands;
 
 public class Add : IExecutable, ICancellable
 {
-    private readonly Aliases _storage;
+    private readonly IStorage _aliasStorage;
 
-    public Add(Aliases storage)
+    public Add(IStorage aliasStorage)
     {
-        _storage = storage;
+        _aliasStorage = aliasStorage;
     }
 
     public string? Alias { get; set; }
@@ -33,7 +34,7 @@ public class Add : IExecutable, ICancellable
             return false;
         }
 
-        Dictionary<string, string> aliases = _storage.Load();
+        var aliases = _aliasStorage.Load<Dictionary<string, string>>();
         string alias = args[0];
 
         if (!aliases.TryAdd(alias, path))
@@ -43,7 +44,7 @@ public class Add : IExecutable, ICancellable
         }
 
         Alias = alias;
-        _storage.Save(aliases);
+        _aliasStorage.Save(aliases);
         return true;
     }
 
@@ -51,7 +52,7 @@ public class Add : IExecutable, ICancellable
     {
         Debug.Assert(Alias is not null);
 
-        Dictionary<string, string> aliases = _storage.Load();
+        var aliases = _aliasStorage.Load<Dictionary<string, string>>();
         if (OldPath is null)
         {
             aliases.Remove(Alias);
@@ -61,6 +62,6 @@ public class Add : IExecutable, ICancellable
             aliases[Alias] = OldPath;
         }
 
-        _storage.Save(aliases);
+        _aliasStorage.Save(aliases);
     }
 }

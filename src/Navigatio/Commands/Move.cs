@@ -1,16 +1,17 @@
 using System.Diagnostics;
+using Navigatio.Storages;
 
 namespace Navigatio.Commands;
 
 public class Move : IExecutable, ICancellable
 {
     private readonly string _outputFile;
-    private readonly Aliases _storage;
+    private readonly IStorage _aliasStorage;
 
-    public Move(string outputFile, Aliases storage)
+    public Move(string outputFile, IStorage aliasStorage)
     {
         _outputFile = outputFile;
-        _storage = storage;
+        _aliasStorage = aliasStorage;
     }
 
     public string? OldPath { get; set; }
@@ -44,7 +45,7 @@ public class Move : IExecutable, ICancellable
             alias = alias[..slash];
         }
 
-        if (!_storage.Load().TryGetValue(alias, out string? path))
+        if (!_aliasStorage.Load<Dictionary<string, string>>().TryGetValue(alias, out string? path))
         {
             Console.WriteLine($"Alias '{alias}' not found.");
             return false;

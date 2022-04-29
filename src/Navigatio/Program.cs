@@ -1,8 +1,9 @@
 ﻿using Navigatio;
+using Navigatio.Storages;
 using static System.IO.Path;
 
 // TODO:
-// refactor code duplication (aliases & history)
+// refactor code duplication in commands
 // add help
 
 
@@ -17,8 +18,9 @@ using static System.IO.Path;
 
 string exePath = AppContext.BaseDirectory;
 
-var aliases = new Aliases(Join(exePath, "aliases.json"));
-var history = new History(Join(exePath, "history.json"));
+var aliases = new JsonStorage(Join(exePath, "aliases.json"));
+var historyStorage = new JsonStorage(Join(exePath, "history.json"));
+var history = new History(historyStorage);
 var commander = new Commander(aliases, history, Join(exePath, "output.sh"));
 
 var app = new Application(args, commander, history);

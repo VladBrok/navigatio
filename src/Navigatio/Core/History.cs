@@ -1,4 +1,5 @@
 using Navigatio.Commands;
+using Navigatio.Storages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -6,23 +7,23 @@ namespace Navigatio;
 
 public class History
 {
-    private readonly string _file;
+    private readonly IStorage _storage;
 
-    public History(string file)
+    public History(IStorage storage)
     {
-        _file = file;
+        _storage = storage;
     }
 
     public void Push(string name, ICancellable command)
     {
-        Stack<(string, object)> history = Load<object>();
+        var history = LoadStack<(string, object)>();
         history.Push((name, command));
-        Save(history);
+        _storage.Save(history);
     }
 
     public ICancellable? Pop(Func<string, IExecutable> getCommand)
     {
-        Stack<(string, JObject)> history = Load<JObject>();
+        var history = LoadStack<(string, JObject)>();
         if (!history.Any())
         {
             return null;
@@ -32,29 +33,14 @@ public class History
         var command = (ICancellable)getCommand(name);
         JsonConvert.PopulateObject(data.ToString(), command);
 
-        Save(history);
+        _storage.Save(history);
         return command;
     }
 
-    // TODO: Remove code duplication with Aliases class
-    private void Save<T>(Stack<(string, T)> history)
+    private Stack<T> LoadStack<T>()
     {
-        string json = JsonConvert.SerializeObject(history);
-        using var writer = new StreamWriter(_file);
-        writer.WriteLine(json);
-    }
-
-    private Stack<(string, T)> Load<T>()
-    {
-        if (!File.Exists(_file))
-        {
-            using var _ = File.Create(_file);
-            return new Stack<(string, T)>();
-        }
-
-        using var reader = new StreamReader(_file);
-        string json = reader.ReadToEnd();
-        return new Stack<(string, T)>(
-            JsonConvert.DeserializeObject<Stack<(string, T)>>(json)!);
+        // Need to wrap in the new stack, because otherwise
+        // it loads in the reverse order.
+        return new Stack<T>(_storage.Load<Stack<T>>());
     }
 }

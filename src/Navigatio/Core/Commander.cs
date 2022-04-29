@@ -1,4 +1,5 @@
 using Navigatio.Commands;
+using Navigatio.Storages;
 
 namespace Navigatio;
 
@@ -6,7 +7,7 @@ public class Commander
 {
     private readonly Dictionary<string, Func<IExecutable>> _commands;
 
-    public Commander(Aliases aliases, History history, string shellOutputFile)
+    public Commander(IStorage aliases, History history, string shellOutputFile)
     {
         _commands = new Dictionary<string, Func<IExecutable>>
         {

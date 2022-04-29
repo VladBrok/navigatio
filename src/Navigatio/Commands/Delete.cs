@@ -1,12 +1,14 @@
+using Navigatio.Storages;
+
 namespace Navigatio.Commands;
 
 public class Delete : IExecutable, ICancellable
 {
-    private readonly Aliases _storage;
+    private readonly IStorage _aliasStorage;
 
-    public Delete(Aliases storage)
+    public Delete(IStorage aliasStorage)
     {
-        _storage = storage;
+        _aliasStorage = aliasStorage;
     }
 
     public string? Alias { get; set; }
@@ -20,7 +22,7 @@ public class Delete : IExecutable, ICancellable
         }
 
         string alias = args[0];
-        Dictionary<string, string> aliases = _storage.Load();
+        var aliases = _aliasStorage.Load<Dictionary<string, string>>();
         if (!aliases.ContainsKey(alias))
         {
             Console.WriteLine($"Alias '{alias}' not found.");
@@ -30,7 +32,7 @@ public class Delete : IExecutable, ICancellable
         Alias = alias;
         Path = aliases[alias];
         aliases.Remove(alias);
-        _storage.Save(aliases);
+        _aliasStorage.Save(aliases);
         return true;
     }
 
@@ -41,8 +43,8 @@ public class Delete : IExecutable, ICancellable
             return;
         }
 
-        Dictionary<string, string> aliases = _storage.Load();
+        var aliases = _aliasStorage.Load<Dictionary<string, string>>();
         aliases.Add(Alias, Path);
-        _storage.Save(aliases);
+        _aliasStorage.Save(aliases);
     }
 }
