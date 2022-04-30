@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Navigatio.Storages;
 
-public class JsonStorage : IStorage
+public class JsonStorage : IStorage, IPopulator
 {
     private readonly string _file;
     private readonly JsonSerializerSettings _settings;
@@ -17,11 +17,25 @@ public class JsonStorage : IStorage
     }
 
     public void Load<T>(Action<T> callback)
-        where T : new()
+        where T : notnull, new()
     {
-        var data = Load<T>();
-        callback(data);
-        Save(data);
+        T? data = default;
+        try
+        {
+            data = Load<T>();
+            callback(data);
+        }
+        finally
+        {
+            Save(data);
+        }
+    }
+
+    public void Populate<T, U>(T obj, U data)
+        where T : notnull
+        where U : notnull
+    {
+        JsonConvert.PopulateObject(data.ToString() ?? "", obj);
     }
 
     private T Load<T>()
@@ -35,7 +49,7 @@ public class JsonStorage : IStorage
 
         using var reader = new StreamReader(_file);
         string json = reader.ReadToEnd();
-        return JsonConvert.DeserializeObject<T>(json, _settings)!;
+        return JsonConvert.DeserializeObject<T>(json, _settings) ?? new T();
     }
 
     private void Save<T>(T data)

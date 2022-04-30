@@ -1,15 +1,13 @@
 using Navigatio.Commands;
 using Navigatio.Storages;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Navigatio;
 
 public class History
 {
-    private readonly IStorage _storage;
+    private readonly IPopulator _storage;
 
-    public History(IStorage storage)
+    public History(IPopulator storage)
     {
         _storage = storage;
     }
@@ -25,17 +23,17 @@ public class History
     public ICancellable? Pop(Func<string, IExecutable> getCommand)
     {
         ICancellable? command = null;
-        _storage.Load<LinkedList<(string, JObject)>>(history =>
+        _storage.Load<LinkedList<(string, object)>>(history =>
         {
             if (!history.Any())
             {
                 return;
             }
 
-            (string name, JObject data) = history.First();
+            (string name, object data) = history.First();
             history.RemoveFirst();
             command = (ICancellable)getCommand(name);
-            JsonConvert.PopulateObject(data.ToString(), command);
+            _storage.Populate(command, data);
         });
 
         return command;
