@@ -4,8 +4,8 @@ using Newtonsoft.Json;
 using static System.IO.Path;
 
 // TODO:
-// fix show command output (make 2 columns)
 // do something with object and JObject in the history class
+// do something with Load<Explicit type>
 // add help
 
 

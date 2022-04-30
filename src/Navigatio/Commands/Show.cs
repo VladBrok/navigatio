@@ -16,9 +16,10 @@ public class Show : IExecutable
         Console.WriteLine();
         _aliasStorage.Load<Dictionary<string, string>>(aliases =>
         {
+            int maxWidth = aliases.Keys.Max(x => x.Length) + 2;
             foreach (var alias in aliases)
             {
-                Console.WriteLine($"  {alias.Key}  ->  {alias.Value}");
+                Console.WriteLine($"{alias.Key.PadLeft(maxWidth)}   ->   {alias.Value}");
             }
         });
         return true;
