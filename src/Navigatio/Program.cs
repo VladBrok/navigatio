@@ -3,7 +3,8 @@ using Navigatio.Storages;
 using static System.IO.Path;
 
 // TODO:
-// add help
+// make a Table class and give it to Help and Show classes
+// add config
 
 string exePath = AppContext.BaseDirectory;
 
