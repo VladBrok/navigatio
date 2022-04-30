@@ -1,7 +1,7 @@
 namespace Navigatio.Storages;
 
-public interface IStorage
+public interface IStorage<T>
+    where T : notnull, new()
 {
-    void Load<T>(Action<T> callback)
-        where T : notnull, new();
+    void Load(Action<T> callback);
 }

@@ -1,8 +1,9 @@
 namespace Navigatio.Storages;
 
-public interface IPopulator : IStorage
+public interface IPopulator<T> : IStorage<T>
+    where T : notnull, new()
 {
-    void Populate<T, U>(T target, U data)
-        where T : notnull
+    void Populate<S, U>(S target, U data)
+        where S : notnull
         where U : notnull;
 }

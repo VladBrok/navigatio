@@ -7,7 +7,7 @@ public class Commander
 {
     private readonly Dictionary<string, Func<IExecutable>> _commands;
 
-    public Commander(IStorage aliases, History history, string shellOutputFile)
+    public Commander(IStorage<Dictionary<string, string>> aliases, History history, string shellOutputFile)
     {
         _commands = new Dictionary<string, Func<IExecutable>>
         {

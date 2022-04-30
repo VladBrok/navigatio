@@ -4,9 +4,9 @@ namespace Navigatio.Commands;
 
 public class Delete : IExecutable, ICancellable
 {
-    private readonly IStorage _aliasStorage;
+    private readonly IStorage<Dictionary<string, string>> _aliasStorage;
 
-    public Delete(IStorage aliasStorage)
+    public Delete(IStorage<Dictionary<string, string>> aliasStorage)
     {
         _aliasStorage = aliasStorage;
     }
@@ -22,7 +22,7 @@ public class Delete : IExecutable, ICancellable
         }
 
         string alias = args[0];
-        _aliasStorage.Load<Dictionary<string, string>>(aliases =>
+        _aliasStorage.Load(aliases =>
         {
             if (!aliases.ContainsKey(alias))
             {
@@ -45,7 +45,7 @@ public class Delete : IExecutable, ICancellable
             return;
         }
 
-        _aliasStorage.Load<Dictionary<string, string>>(aliases =>
+        _aliasStorage.Load(aliases =>
         {
             aliases.Add(Alias, Path);
         });

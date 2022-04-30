@@ -4,9 +4,9 @@ namespace Navigatio.Commands;
 
 public class Show : IExecutable
 {
-    private readonly IStorage _aliasStorage;
+    private readonly IStorage<Dictionary<string, string>> _aliasStorage;
 
-    public Show(IStorage aliasStorage)
+    public Show(IStorage<Dictionary<string, string>> aliasStorage)
     {
         _aliasStorage = aliasStorage;
     }
@@ -14,7 +14,7 @@ public class Show : IExecutable
     public bool Execute(params string[] _)
     {
         Console.WriteLine();
-        _aliasStorage.Load<Dictionary<string, string>>(aliases =>
+        _aliasStorage.Load(aliases =>
         {
             int maxWidth = aliases.Keys.Max(x => x.Length) + 2;
             foreach (var alias in aliases)

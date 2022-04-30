@@ -6,9 +6,9 @@ namespace Navigatio.Commands;
 public class Move : IExecutable, ICancellable
 {
     private readonly string _outputFile;
-    private readonly IStorage _aliasStorage;
+    private readonly IStorage<Dictionary<string, string>> _aliasStorage;
 
-    public Move(string outputFile, IStorage aliasStorage)
+    public Move(string outputFile, IStorage<Dictionary<string, string>> aliasStorage)
     {
         _outputFile = outputFile;
         _aliasStorage = aliasStorage;
@@ -40,7 +40,7 @@ public class Move : IExecutable, ICancellable
         string? subfolder = ExtractSubfolder(ref alias);
         string? path = null;
 
-        _aliasStorage.Load<Dictionary<string, string>>(aliases =>
+        _aliasStorage.Load(aliases =>
         {
             aliases.TryGetValue(alias, out path);
         });

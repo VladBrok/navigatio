@@ -6,9 +6,9 @@ namespace Navigatio.Commands;
 
 public class Add : IExecutable, ICancellable
 {
-    private readonly IStorage _aliasStorage;
+    private readonly IStorage<Dictionary<string, string>> _aliasStorage;
 
-    public Add(IStorage aliasStorage)
+    public Add(IStorage<Dictionary<string, string>> aliasStorage)
     {
         _aliasStorage = aliasStorage;
     }
@@ -35,7 +35,7 @@ public class Add : IExecutable, ICancellable
         }
 
         string alias = args[0];
-        _aliasStorage.Load<Dictionary<string, string>>(aliases =>
+        _aliasStorage.Load(aliases =>
         {
             if (aliases.TryAdd(alias, path))
             {
@@ -53,7 +53,7 @@ public class Add : IExecutable, ICancellable
     {
         Debug.Assert(Alias is not null);
 
-        _aliasStorage.Load<Dictionary<string, string>>(aliases =>
+        _aliasStorage.Load(aliases =>
         {
             if (OldPath is null)
             {
