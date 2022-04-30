@@ -2,9 +2,9 @@ using Navigatio.Commands;
 
 namespace Navigatio;
 
-public class Command
+public class CommandData
 {
-    public Command(
+    public CommandData(
         string name,
         string shortName,
         Func<IExecutable> executor,

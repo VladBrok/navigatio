@@ -5,7 +5,7 @@ namespace Navigatio;
 
 public class Commander
 {
-    private readonly Dictionary<string, Command> _commands;
+    private readonly Dictionary<string, CommandData> _commands;
     private readonly History _history;
 
     public Commander(
@@ -15,7 +15,7 @@ public class Commander
         string shellOutputFile)
     {
         _history = history;
-        var add = new Command(
+        var add = new CommandData(
             "--add",
             "-a",
             () => new Add(aliases),
@@ -24,33 +24,33 @@ public class Commander
             ("alias", "An alias for the path."),
             ("path", "A full, valid path to the folder. If a folder does not exist it will be created. " +
                      "To take a current path simply write . (dot)."));
-        var delete = new Command(
+        var delete = new CommandData(
             "--del",
             "-d",
             () => new Delete(aliases),
             "Removes an alias if it exists.",
             "nav --del [alias]",
             ("alias", "An alias to delete."));
-        var move = new Command(
+        var move = new CommandData(
             "--move",
             "-m",
             () => new Move(shellOutputFile, aliases),
             "Performs cd to the path indicated by the alias. You can just type 'nav [alias]'",
             "nav [alias]",
             ("alias", "An alias for the path."));
-        var show = new Command(
+        var show = new CommandData(
             "--show",
             "-s",
             () => new Show(aliases, table),
             "Shows all aliases and the paths they point to.",
             "nav --show");
-        var undo = new Command(
+        var undo = new CommandData(
             "--undo",
             "-u",
             () => new Undo(this, history),
             "Cancels the last command. You cannot undo it.",
             "nav --undo");
-        var help = new Command(
+        var help = new CommandData(
             "--help",
             "-h",
             () => new Help(this, table),
@@ -58,8 +58,8 @@ public class Commander
             "nav --help [command]",
             ("command", "Command to show information for. If omited, shows information for all commands."));
 
-        _commands = new Dictionary<string, Command>();
-        foreach (Command c in new[] { add, delete, move, show, undo, help })
+        _commands = new Dictionary<string, CommandData>();
+        foreach (CommandData c in new[] { add, delete, move, show, undo, help })
         {
             _commands.Add(c.Name, c);
             _commands.Add(c.ShortName, c);
@@ -84,14 +84,14 @@ public class Commander
         return _commands[name].Executor();
     }
 
-    public IEnumerable<Command> GetAllCommands()
+    public IEnumerable<CommandData> GetAllCommands()
     {
         return _commands.Values.Distinct().AsEnumerable();
     }
 
-    public Command? GetCommand(string name)
+    public CommandData? GetCommand(string name)
     {
-        _commands.TryGetValue(name, out Command? result);
+        _commands.TryGetValue(name, out CommandData? result);
         return result;
     }
 }

@@ -17,14 +17,14 @@ public class Help : IExecutable
     {
         if (args.Length < 1)
         {
-            foreach (Command c in _commander.GetAllCommands())
+            foreach (CommandData c in _commander.GetAllCommands())
             {
                 ShowHelpFor(c);
             }
         }
         else
         {
-            Command? c = _commander.GetCommand(args[0]);
+            CommandData? c = _commander.GetCommand(args[0]);
             if (c is null)
             {
                 Console.WriteLine($"Command '{args[0]}' not found.");
@@ -36,7 +36,7 @@ public class Help : IExecutable
         return true;
     }
 
-    private void ShowHelpFor(Command c)
+    private void ShowHelpFor(CommandData c)
     {
         Console.WriteLine();
         Console.WriteLine($"{c.Name}, {c.ShortName}");
