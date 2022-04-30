@@ -5,10 +5,12 @@ namespace Navigatio.Commands;
 public class Show : IExecutable
 {
     private readonly IStorage<Dictionary<string, string>> _aliasStorage;
+    private readonly Table _table;
 
-    public Show(IStorage<Dictionary<string, string>> aliasStorage)
+    public Show(IStorage<Dictionary<string, string>> aliasStorage, Table table)
     {
         _aliasStorage = aliasStorage;
+        _table = table;
     }
 
     public bool Execute(params string[] _)
@@ -16,11 +18,12 @@ public class Show : IExecutable
         Console.WriteLine();
         _aliasStorage.Load(aliases =>
         {
-            int maxWidth = aliases.Keys.Max(x => x.Length) + 2;
-            foreach (var alias in aliases)
+            if (!aliases.Any())
             {
-                Console.WriteLine($"{alias.Key.PadLeft(maxWidth)}   ->   {alias.Value}");
+                Console.WriteLine("Aliases not found.");
+                return;
             }
+            _table.Print(aliases.Keys, aliases.Values, 4, 2);
         });
         return true;
     }

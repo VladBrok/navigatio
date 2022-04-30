@@ -10,6 +10,7 @@ public class Commander
     public Commander(
         IStorage<Dictionary<string, string>> aliases,
         History history,
+        Table table,
         string shellOutputFile)
     {
         var add = new Command(
@@ -38,7 +39,7 @@ public class Commander
         var show = new Command(
             "--show",
             "-s",
-            () => new Show(aliases),
+            () => new Show(aliases, table),
             "Shows all aliases and the paths they point to.",
             "nav --show");
         var undo = new Command(
@@ -50,7 +51,7 @@ public class Commander
         var help = new Command(
             "--help",
             "-h",
-            () => new Help(this),
+            () => new Help(this, table),
             "Shows information about all commands.",
             "nav --help [command]",
             ("command", "Command to show information for. If omited, shows information for all commands."));

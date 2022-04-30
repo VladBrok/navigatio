@@ -3,10 +3,12 @@ namespace Navigatio.Commands;
 public class Help : IExecutable
 {
     private readonly Commander _commander;
+    private readonly Table _table;
 
-    public Help(Commander commander)
+    public Help(Commander commander, Table table)
     {
         _commander = commander;
+        _table = table;
     }
 
     private string NewLine => $"{Environment.NewLine}      ";
@@ -46,14 +48,10 @@ public class Help : IExecutable
         }
 
         WriteWithMargin($"Arguments:");
-        int maxWidth = c.Arguments.Max(x => x.Item1.Length) + 2;
-        foreach (var arg in c.Arguments)
-        {
-            WriteWithMargin($"{arg.Item1.PadLeft(maxWidth)}  {arg.Item2}");
-        }
+        _table.Print(c.Arguments.Select(x => x.Item1), c.Arguments.Select(x => x.Item2), 4, 6);
     }
 
-    private void WriteWithMargin(string msg)
+    private static void WriteWithMargin(string msg)
     {
         Console.WriteLine($"    {msg}");
     }
