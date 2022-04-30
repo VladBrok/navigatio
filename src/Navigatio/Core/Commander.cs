@@ -6,6 +6,7 @@ namespace Navigatio;
 public class Commander
 {
     private readonly Dictionary<string, Command> _commands;
+    private readonly History _history;
 
     public Commander(
         IStorage<Dictionary<string, string>> aliases,
@@ -13,6 +14,7 @@ public class Commander
         Table table,
         string shellOutputFile)
     {
+        _history = history;
         var add = new Command(
             "--add",
             "-a",
@@ -64,20 +66,22 @@ public class Commander
         }
     }
 
+    public void Execute(string[] args)
+    {
+        (string name, string[] arguments) = _commands.ContainsKey(args[0])
+                                            ? (args[0], args[1..])
+                                            : ("--move", args);
+        IExecutable command = _commands[name].Executor();
+        bool executed = command.Execute(arguments);
+        if (executed && command is ICancellable c)
+        {
+            _history.Push(name, c);
+        }
+    }
+
     public IExecutable Get(string name)
     {
         return _commands[name].Executor();
-    }
-
-    public IExecutable Get(ref string[] args)
-    {
-        if (_commands.TryGetValue(args[0], out Command? c))
-        {
-            return c.Executor();
-        }
-
-        args = args.Prepend("--move").ToArray();
-        return _commands["--move"].Executor();
     }
 
     public IEnumerable<Command> GetAllCommands()

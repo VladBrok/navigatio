@@ -3,10 +3,12 @@ using Navigatio.Storages;
 using static System.IO.Path;
 
 // TODO:
-// remove Application class and move it's logic to the Commander ?
+// add ICommandHolder interface ?
 // add error handling (command usage exception, etc.)
 // add config
 // add more info about command execution
+// optimize file IO
+// make history limit ?
 
 string exePath = AppContext.BaseDirectory;
 var aliases = new JsonStorage<Dictionary<string, string>>(
@@ -16,7 +18,6 @@ var historyStorage = new JsonStorage<LinkedList<(string, object)>>(
 
 var history = new History(historyStorage);
 var table = new Table();
-var commander = new Commander(aliases, history, table, Join(exePath, "output.sh"));
 
-var app = new Application(args, commander, history);
-app.Run();
+var commander = new Commander(aliases, history, table, Join(exePath, "output.sh"));
+commander.Execute(args);
