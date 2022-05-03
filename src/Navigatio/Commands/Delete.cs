@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Navigatio.Storages;
 
 namespace Navigatio.Commands;
@@ -33,6 +34,7 @@ public class Delete : IExecutable, ICancellable
             Alias = alias;
             Path = aliases[alias];
             aliases.Remove(alias);
+            Console.WriteLine($"Alias '{alias}' deleted. It pointed to '{Path}'.");
         });
 
         return Alias is not null;
@@ -40,14 +42,12 @@ public class Delete : IExecutable, ICancellable
 
     public void Cancel()
     {
-        if (Alias is null || Path is null)
-        {
-            return;
-        }
+        Debug.Assert(Alias is not null && Path is not null);
 
         _aliasStorage.Load(aliases =>
         {
             aliases.Add(Alias, Path);
+            Console.WriteLine($"Alias '{Alias}' added. It points to '{Path}'.");
         });
     }
 }

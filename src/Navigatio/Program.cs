@@ -3,7 +3,6 @@ using Navigatio.Storages;
 using static System.IO.Path;
 
 // TODO:
-// add more info about command execution
 // add execution time
 // add windows cmd support
 // optimize file IO

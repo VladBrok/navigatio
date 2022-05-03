@@ -15,11 +15,14 @@ public class Undo : IExecutable
 
     public bool Execute(params string[] _)
     {
+        string? commandName = null;
         ICancellable? last = _history.Pop(name =>
         {
-            IExecutable? c = _commander.Get(name)?.Executor();
+            CommandData? c = _commander.Get(name);
             Debug.Assert(c is not null);
-            return c;
+
+            commandName = c.Name;
+            return c.Executor();
         });
 
         if (last is null)
@@ -28,6 +31,7 @@ public class Undo : IExecutable
             return false;
         }
 
+        Console.WriteLine($"Undoing the command '{commandName}'...");
         last.Cancel();
         return true;
     }

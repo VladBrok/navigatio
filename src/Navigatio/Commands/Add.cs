@@ -28,7 +28,11 @@ public class Add : IExecutable, ICancellable
                       : args[1];
         try
         {
-            Directory.CreateDirectory(path);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+                Console.WriteLine($"Directory '{path}' created.");
+            }
         }
         catch
         {
@@ -41,10 +45,13 @@ public class Add : IExecutable, ICancellable
         {
             if (aliases.TryAdd(alias, path))
             {
+                Console.WriteLine($"Alias '{alias}' added.");
                 return;
             }
+
             OldPath = aliases[alias];
             aliases[alias] = path;
+            Console.WriteLine($"Alias '{alias}' updated. Previously pointed to '{OldPath}'.");
         });
 
         Alias = alias;
@@ -60,11 +67,12 @@ public class Add : IExecutable, ICancellable
             if (OldPath is null)
             {
                 aliases.Remove(Alias);
+                Console.WriteLine($"Alias {Alias} deleted.");
+                return;
             }
-            else
-            {
-                aliases[Alias] = OldPath;
-            }
+
+            aliases[Alias] = OldPath;
+            Console.WriteLine($"Alias '{Alias}' updated. Now points to '{OldPath}'.");
         });
     }
 }
