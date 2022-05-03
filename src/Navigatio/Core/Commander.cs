@@ -21,8 +21,8 @@ public class Commander
             () => new Add(aliases),
             "Adds a new alias for the specified path. If the same alias already exists, overwrites an old path.",
             "nav --add [alias] [path]",
-            ("alias", "An alias for the path."),
-            ("path", "A full, valid path to the folder. If a folder does not exist it will be created. " +
+            ("alias", "An alias for the path. It cannot start with '-' and cannot contain '\\' or '/'."),
+            ("path", "A full, valid path to the folder. If a folder does not exist, it will be created. " +
                      "To take a current path simply write . (dot)."));
         var delete = new CommandData(
             "--del",
@@ -35,7 +35,7 @@ public class Commander
             "--move",
             "-m",
             () => new Move(shellOutputFile, aliases),
-            "Performs cd to the path indicated by the alias. You can just type 'nav [alias]'",
+            "Performs cd to the path indicated by the alias.",
             "nav [alias]",
             ("alias", "An alias for the path."));
         var show = new CommandData(
@@ -48,7 +48,7 @@ public class Commander
             "--undo",
             "-u",
             () => new Undo(this, history),
-            "Cancels the last command. You cannot undo it.",
+            "Cancels the last command. Redo is not supported.",
             "nav --undo");
         var help = new CommandData(
             "--help",
@@ -66,20 +66,21 @@ public class Commander
         }
     }
 
-    public void Execute(string[] args)
+    public void Run(string[] args)
     {
-        (string name, string[] arguments) = _commands.ContainsKey(args[0])
-                                            ? (args[0], args[1..])
-                                            : ("--move", args);
-        IExecutable command = _commands[name].Executor();
-        bool executed = command.Execute(arguments);
-        if (executed && command is ICancellable c)
+        (string name, string[] arguments) = ExtractCommandInfo(args);
+        try
         {
-            _history.Push(name, c);
+            ExecuteCommand(name, arguments);
+        }
+        catch (CommandUsageException)
+        {
+            Console.WriteLine("Invalid usage of the command.");
+            _commands["--help"].Executor().Execute(name);
         }
     }
 
-    public IExecutable Get(string name)
+    public IExecutable Get(string name) // TODO: Remove ?
     {
         return _commands[name].Executor();
     }
@@ -93,5 +94,22 @@ public class Commander
     {
         _commands.TryGetValue(name, out CommandData? result);
         return result;
+    }
+
+    private (string name, string[] arguments) ExtractCommandInfo(string[] args)
+    {
+        return _commands.ContainsKey(args[0])
+               ? (args[0], args[1..])
+               : ("--move", args);
+    }
+
+    private void ExecuteCommand(string name, string[] arguments)
+    {
+        IExecutable command = _commands[name].Executor();
+        bool executed = command.Execute(arguments);
+        if (executed && command is ICancellable c)
+        {
+            _history.Push(name, c);
+        }
     }
 }
