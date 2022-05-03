@@ -71,6 +71,7 @@ public class Move : IExecutable, ICancellable
             subfolder = alias[slash..];
             alias = alias[..slash];
         }
+
         return subfolder;
     }
 }

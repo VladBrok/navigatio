@@ -10,6 +10,7 @@ public class Table
     {
         int maxWidth = firstColumn.Max(x => x.Length) + marginLeft;
         var gap = new string(' ', distanceBetween);
+
         foreach (var (First, Second) in firstColumn.Zip(secondColumn))
         {
             Console.WriteLine($"{First.PadLeft(maxWidth)}{gap}{Second}");
