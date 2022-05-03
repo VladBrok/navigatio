@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Navigatio.Commands;
 using Navigatio.Storages;
 
@@ -16,55 +15,54 @@ public class Commander : ICommander
         string shellFile)
     {
         _history = history;
-        var add = new CommandData(
-            "--add",
-            "-a",
-            () => new Add(aliases),
-            "Adds a new alias for the specified path. If the same alias already exists, overwrites an old path.",
-            "nav --add [alias] [path]",
-            ("alias", "An alias for the path. It cannot start with '-' and cannot contain '\\' or '/'."),
-            ("path", "A full, valid path to the folder. If a folder does not exist, it will be created. " +
-                     "To take a current path simply write . (dot)."));
-        var delete = new CommandData(
-            "--del",
-            "-d",
-            () => new Delete(aliases),
-            "Removes an alias if it exists.",
-            "nav --del [alias]",
-            ("alias", "An alias to delete."));
-        var move = new CommandData(
-            "--move",
-            "-m",
-            () => new Move(shellFile, aliases),
-            "Performs cd to the path indicated by the alias.",
-            "nav [alias]",
-            ("alias", "An alias for the path."));
-        var show = new CommandData(
-            "--show",
-            "-s",
-            () => new Show(aliases, table),
-            "Shows all aliases and the paths they point to.",
-            "nav --show");
-        var undo = new CommandData(
-            "--undo",
-            "-u",
-            () => new Undo(this, history),
-            "Cancels the last command. Redo is not supported.",
-            "nav --undo");
-        var help = new CommandData(
-            "--help",
-            "-h",
-            () => new Help(this, table),
-            "Shows information about all commands.",
-            "nav --help [command]",
-            ("command", "Command to show information for. If omited, shows information for all commands."));
+        var data = new[]
+        {
+            new CommandData(
+                "--add",
+                "-a",
+                () => new Add(aliases),
+                "Adds a new alias for the specified path. If the same alias already exists, overwrites an old path.",
+                "nav --add [alias] [path]",
+                ("alias", "An alias for the path. It cannot start with '-' and cannot contain '\\' or '/'."),
+                ("path", "A full, valid path to the folder. If a folder does not exist, it will be created. " +
+                         "To take a current path simply write . (dot).")),
+            new CommandData(
+                "--del",
+                "-d",
+                () => new Delete(aliases),
+                "Removes an alias if it exists.",
+                "nav --del [alias]",
+                ("alias", "An alias to delete.")),
+            new CommandData(
+                "--move",
+                "-m",
+                () => new Move(shellFile, aliases),
+                "Performs cd to the path indicated by the alias.",
+                "nav [alias]",
+                ("alias", "An alias for the path.")),
+            new CommandData(
+                "--show",
+                "-s",
+                () => new Show(aliases, table),
+                "Shows all aliases and the paths they point to.",
+                "nav --show"),
+            new CommandData(
+                "--undo",
+                "-u",
+                () => new Undo(this, history),
+                "Cancels the last command. Redo is not supported.",
+                "nav --undo"),
+            new CommandData(
+                "--help",
+                "-h",
+                () => new Help(this, table),
+                "Shows information about all commands.",
+                "nav --help [command]",
+                ("command", "Command to show information for. If omited, shows information for all commands."))
+        };
 
         _commands = new Dictionary<string, CommandData>();
-        foreach (CommandData c in new[] { add, delete, move, show, undo, help })
-        {
-            _commands.Add(c.Name, c);
-            _commands.Add(c.ShortName, c);
-        }
+        InitializeCommands(data);
     }
 
     public void Run(string[] args)
@@ -96,6 +94,15 @@ public class Commander : ICommander
     public IEnumerable<CommandData> GetAll()
     {
         return _commands.Values.Distinct().AsEnumerable();
+    }
+
+    private void InitializeCommands(CommandData[] data)
+    {
+        for (int i = 0; i < data.Length; i++)
+        {
+            _commands.Add(data[i].Name, data[i]);
+            _commands.Add(data[i].ShortName, data[i]);
+        }
     }
 
     private (string name, string[] arguments) ExtractCommandInfo(string[] args)
