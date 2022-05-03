@@ -3,7 +3,7 @@ using Navigatio.Storages;
 
 namespace Navigatio;
 
-public class Commander
+public class Commander : ICommander
 {
     private readonly Dictionary<string, CommandData> _commands;
     private readonly History _history;
@@ -68,6 +68,12 @@ public class Commander
 
     public void Run(string[] args)
     {
+        if (!args.Any())
+        {
+            _commands["--help"].Executor().Execute();
+            return;
+        }
+
         (string name, string[] arguments) = ExtractCommandInfo(args);
         try
         {
@@ -80,20 +86,15 @@ public class Commander
         }
     }
 
-    public IExecutable Get(string name) // TODO: Remove ?
-    {
-        return _commands[name].Executor();
-    }
-
-    public IEnumerable<CommandData> GetAllCommands()
-    {
-        return _commands.Values.Distinct().AsEnumerable();
-    }
-
-    public CommandData? GetCommand(string name)
+    public CommandData? Get(string name)
     {
         _commands.TryGetValue(name, out CommandData? result);
         return result;
+    }
+
+    public IEnumerable<CommandData> GetAll()
+    {
+        return _commands.Values.Distinct().AsEnumerable();
     }
 
     private (string name, string[] arguments) ExtractCommandInfo(string[] args)

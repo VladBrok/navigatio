@@ -2,10 +2,10 @@ namespace Navigatio.Commands;
 
 public class Help : IExecutable
 {
-    private readonly Commander _commander;
+    private readonly ICommander _commander;
     private readonly Table _table;
 
-    public Help(Commander commander, Table table)
+    public Help(ICommander commander, Table table)
     {
         _commander = commander;
         _table = table;
@@ -17,14 +17,14 @@ public class Help : IExecutable
     {
         if (args.Length < 1)
         {
-            foreach (CommandData c in _commander.GetAllCommands())
+            foreach (CommandData c in _commander.GetAll())
             {
                 ShowHelpFor(c);
             }
         }
         else
         {
-            CommandData? c = _commander.GetCommand(args[0]);
+            CommandData? c = _commander.Get(args[0]);
             if (c is null)
             {
                 Console.WriteLine($"Command '{args[0]}' not found.");
