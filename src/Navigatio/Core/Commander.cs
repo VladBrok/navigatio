@@ -12,7 +12,7 @@ public class Commander : ICommander
         IStorage<Dictionary<string, string>> aliases,
         History history,
         Table table,
-        string shellOutputFile)
+        string shellFile)
     {
         _history = history;
         var add = new CommandData(
@@ -34,7 +34,7 @@ public class Commander : ICommander
         var move = new CommandData(
             "--move",
             "-m",
-            () => new Move(shellOutputFile, aliases),
+            () => new Move(shellFile, aliases),
             "Performs cd to the path indicated by the alias.",
             "nav [alias]",
             ("alias", "An alias for the path."));

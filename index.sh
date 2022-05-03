@@ -1,8 +1,11 @@
 #!/usr/bin/env
 
 ROOT=$1
-${ROOT}navigatio.exe ${@:2}
-if test -f ${ROOT}output.sh; then
-  source ${ROOT}output.sh
-  > ${ROOT}output.sh
+OUTPUT_FILE=${ROOT}output.sh
+
+${ROOT}navigatio.exe ${OUTPUT_FILE} ${@:2}
+
+if test -f ${OUTPUT_FILE}; then
+  source ${OUTPUT_FILE}
+  > ${OUTPUT_FILE}
 fi

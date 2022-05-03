@@ -3,8 +3,6 @@ using Navigatio.Storages;
 using static System.IO.Path;
 
 // TODO:
-// add ICommandHolder interface ?
-// add config
 // add more info about command execution
 // add execution time
 // add windows cmd support
@@ -20,5 +18,5 @@ var historyStorage = new JsonStorage<LinkedList<(string, object)>>(
 var history = new History(historyStorage);
 var table = new Table();
 
-var commander = new Commander(aliases, history, table, Join(exePath, "output.sh"));
-commander.Run(args);
+var commander = new Commander(aliases, history, table, shellFile: args[0]);
+commander.Run(args[1..]);
