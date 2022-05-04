@@ -24,7 +24,9 @@ public class Move : IExecutable, ICancellable
         }
 
         string alias = args[0];
-        OldPath = Directory.GetCurrentDirectory().Replace('\\', '/');
+        // FIXME
+        // OldPath = Directory.GetCurrentDirectory().Replace('\\', '/');
+        OldPath = Directory.GetCurrentDirectory();
         return MoveToAlias(alias);
     }
 
@@ -58,14 +60,16 @@ public class Move : IExecutable, ICancellable
     private void MoveToPath(string path)
     {
         using var writer = new StreamWriter(_outputFile);
-        writer.WriteLine("#!/usr/bin/env");
-        writer.WriteLine($"cd {path}");
+        // FIXME
+        // writer.WriteLine("#!/usr/bin/env");
+        // writer.WriteLine($"cd {path}");
+        writer.WriteLine($"cd /d {path}");
     }
 
     private static string? ExtractSubfolder(ref string alias)
     {
         string? subfolder = null;
-        int slash = alias.IndexOf("/");
+        int slash = alias.IndexOfAny(new[] { '\\', '/' });
         if (slash != -1)
         {
             subfolder = alias[slash..];
