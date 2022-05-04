@@ -2,6 +2,9 @@
 using Navigatio.Storages;
 using static System.IO.Path;
 
+// TODO:
+// make cleanup, test
+
 string exePath = AppContext.BaseDirectory;
 string settingsFile = Join(exePath, "settings.json");
 
@@ -25,6 +28,5 @@ var commander = new Commander(
     table,
     shellFile: args[0],
     settings,
-    settingsFile,
     settingsStorage);
 commander.Run(args[1..]);

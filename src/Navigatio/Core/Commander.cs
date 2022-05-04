@@ -14,7 +14,6 @@ public class Commander : ICommander
         Table table,
         string shellFile,
         Settings settings,
-        string settingsFile,
         IStorage<Settings> settingsStorage)
     {
         _history = history;
@@ -65,7 +64,7 @@ public class Commander : ICommander
             new CommandData(
                 "--change-settings",
                 "-cs",
-                () => new ChangeSettings(settings, settingsFile, settingsStorage),
+                () => new ChangeSettings(settings, settingsStorage),
                 "Opens a json file in the text editor where you can adjust some settings.",
                 "nav --change-settings")
         };

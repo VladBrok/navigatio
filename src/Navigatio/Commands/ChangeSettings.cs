@@ -5,13 +5,11 @@ namespace Navigatio.Commands;
 
 public class ChangeSettings : IExecutable, ICancellable
 {
-    private readonly string _settingsFile;
     private readonly IStorage<Settings> _storage;
 
-    public ChangeSettings(Settings current, string settingsFile, IStorage<Settings> storage)
+    public ChangeSettings(Settings current, IStorage<Settings> storage)
     {
         OldSettings = current;
-        _settingsFile = settingsFile;
         _storage = storage;
     }
 
@@ -22,7 +20,7 @@ public class ChangeSettings : IExecutable, ICancellable
         Process? editor;
         try
         {
-            var info = new ProcessStartInfo(OldSettings.FavoriteEditor ?? "", _settingsFile)
+            var info = new ProcessStartInfo(OldSettings.FavoriteEditor ?? "", _storage.File)
             {
                 Verb = "Edit"
             };

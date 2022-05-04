@@ -1,21 +1,23 @@
 using Newtonsoft.Json;
+using static System.IO.File;
 
 namespace Navigatio.Storages;
 
 public class JsonStorage<T> : IStorage<T>, IPopulator<T>
     where T : notnull, new()
 {
-    private readonly string _file;
     private readonly JsonSerializerSettings _settings;
 
     public JsonStorage(string file)
     {
-        _file = file;
+        File = file;
         _settings = new()
         {
             NullValueHandling = NullValueHandling.Ignore
         };
     }
+
+    public string File { get; init; }
 
     public void Load(Action<T> callback, bool modifiesData = true)
     {
@@ -43,13 +45,13 @@ public class JsonStorage<T> : IStorage<T>, IPopulator<T>
 
     private T Load()
     {
-        if (!File.Exists(_file))
+        if (!Exists(File))
         {
-            using var _ = File.Create(_file);
+            using var _ = Create(File);
             return new T();
         }
 
-        using var reader = new StreamReader(_file);
+        using var reader = new StreamReader(File);
         string json = reader.ReadToEnd();
         return JsonConvert.DeserializeObject<T>(json, _settings) ?? new T();
     }
@@ -57,7 +59,7 @@ public class JsonStorage<T> : IStorage<T>, IPopulator<T>
     private void Save(T? data)
     {
         string json = JsonConvert.SerializeObject(data, _settings);
-        using var writer = new StreamWriter(_file);
+        using var writer = new StreamWriter(File);
         writer.WriteLine(json);
     }
 }
