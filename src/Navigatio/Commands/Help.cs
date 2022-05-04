@@ -38,8 +38,7 @@ public class Help : IExecutable
 
     private void ShowHelpFor(CommandData c)
     {
-        Console.WriteLine();
-        Console.WriteLine($"{c.Name}, {c.ShortName}");
+        Console.WriteLine($"{NewLine}{c.Name}, {c.ShortName}");
         WriteWithMargin($"Description:{NewLine}{c.Description}");
         WriteWithMargin($"Usage:{NewLine}{c.Usage}");
         if (c.Arguments is null)
@@ -48,7 +47,11 @@ public class Help : IExecutable
         }
 
         WriteWithMargin($"Arguments:");
-        _table.Print(c.Arguments.Select(x => x.Item1), c.Arguments.Select(x => x.Item2), 4, 6);
+        _table.Print(
+            c.Arguments.Select(x => x.Item1),
+            c.Arguments.Select(x => x.Item2),
+            columnGap: 4,
+            marginLeft: 6);
     }
 
     private static void WriteWithMargin(string msg)

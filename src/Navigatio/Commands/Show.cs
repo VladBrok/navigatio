@@ -23,8 +23,12 @@ public class Show : IExecutable
                 Console.WriteLine("Aliases not found.");
                 return;
             }
-            _table.Print(aliases.Keys, aliases.Values, 4, 2);
-        });
+            _table.Print(
+                aliases.Keys,
+                aliases.Values,
+                columnGap: 4,
+                marginLeft: 2);
+        }, modifiesData: false);
         return true;
     }
 }
