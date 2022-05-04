@@ -4,7 +4,6 @@ using Navigatio.Storages;
 using static System.IO.Path;
 
 // TODO:
-// add windows cmd support
 // make history limit ?
 
 string exePath = AppContext.BaseDirectory;

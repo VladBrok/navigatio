@@ -1,3 +1,4 @@
+@echo off
 set ROOT=C:\navigatio\
 set EXE_PATH=src\navigatio\bin\debug\net6.0\
 

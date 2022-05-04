@@ -7,11 +7,15 @@ public class Move : IExecutable, ICancellable
 {
     private readonly string _outputFile;
     private readonly IStorage<Dictionary<string, string>> _aliasStorage;
+    private readonly Func<string, string> _getCdCommand;
 
     public Move(string outputFile, IStorage<Dictionary<string, string>> aliasStorage)
     {
         _outputFile = outputFile;
         _aliasStorage = aliasStorage;
+        _getCdCommand = Path.GetExtension(_outputFile) == ".sh"
+                        ? (path) => $"#!/usr/bin/env{Environment.NewLine}cd {path.Replace('\\', '/')}"
+                        : (path) => $"cd /d {path.Replace('/', '\\')}";
     }
 
     public string? OldPath { get; set; }
@@ -24,8 +28,6 @@ public class Move : IExecutable, ICancellable
         }
 
         string alias = args[0];
-        // FIXME
-        // OldPath = Directory.GetCurrentDirectory().Replace('\\', '/');
         OldPath = Directory.GetCurrentDirectory();
         return MoveToAlias(alias);
     }
@@ -45,7 +47,7 @@ public class Move : IExecutable, ICancellable
         _aliasStorage.Load(aliases =>
         {
             aliases.TryGetValue(alias, out path);
-        });
+        }, modifiesData: false);
 
         if (path is null)
         {
@@ -60,10 +62,7 @@ public class Move : IExecutable, ICancellable
     private void MoveToPath(string path)
     {
         using var writer = new StreamWriter(_outputFile);
-        // FIXME
-        // writer.WriteLine("#!/usr/bin/env");
-        // writer.WriteLine($"cd {path}");
-        writer.WriteLine($"cd /d {path}");
+        writer.WriteLine(_getCdCommand(path));
     }
 
     private static string? ExtractSubfolder(ref string alias)

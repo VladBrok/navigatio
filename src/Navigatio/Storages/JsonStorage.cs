@@ -17,7 +17,7 @@ public class JsonStorage<T> : IStorage<T>, IPopulator<T>
         };
     }
 
-    public void Load(Action<T> callback)
+    public void Load(Action<T> callback, bool modifiesData = true)
     {
         T? data = default;
         try
@@ -27,7 +27,10 @@ public class JsonStorage<T> : IStorage<T>, IPopulator<T>
         }
         finally
         {
-            Save(data);
+            if (modifiesData)
+            {
+                Save(data);
+            }
         }
     }
 

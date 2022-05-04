@@ -23,10 +23,6 @@ public class Add : IExecutable, ICancellable
             throw new CommandUsageException();
         }
 
-        // string path = args[1] == "."
-        //               ? Directory.GetCurrentDirectory().Replace('\\', '/')
-        //               : args[1];
-        // FIXME
         string path = args[1] == "."
                       ? Directory.GetCurrentDirectory()
                       : args[1];
