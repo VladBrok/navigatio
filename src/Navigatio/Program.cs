@@ -3,18 +3,28 @@ using Navigatio.Storages;
 using static System.IO.Path;
 
 string exePath = AppContext.BaseDirectory;
-Settings settings = default;
-new JsonStorage<Settings>(Join(exePath, "settings.json")).Load(s =>
-{
-    settings = s;
-}, modifiesData: false);
+string settingsFile = Join(exePath, "settings.json");
 
+var settingsStorage = new JsonStorage<Settings>(settingsFile);
 var aliases = new JsonStorage<Dictionary<string, string>>(
     Join(exePath, "aliases.json"));
 var historyStorage = new JsonStorage<LinkedList<(string, object)>>(
     Join(exePath, "history.json"));
-var history = new History(historyStorage, settings.CommandHistoryLimit);
+
+Settings? settings = null;
+settingsStorage.Load(s =>
+{
+    settings = s;
+}, modifiesData: false);
+var history = new History(historyStorage, settings!.CommandHistoryLimit);
 var table = new Table();
 
-var commander = new Commander(aliases, history, table, shellFile: args[0]);
+var commander = new Commander(
+    aliases,
+    history,
+    table,
+    shellFile: args[0],
+    settings,
+    settingsFile,
+    settingsStorage);
 commander.Run(args[1..]);

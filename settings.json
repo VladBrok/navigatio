@@ -1,3 +1,4 @@
 {
-  "CommandHistoryLimit": 100
+  "CommandHistoryLimit": 100,
+  "FavoriteEditor": "notepad"
 }

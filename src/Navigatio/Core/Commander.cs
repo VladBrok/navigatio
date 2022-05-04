@@ -12,7 +12,10 @@ public class Commander : ICommander
         IStorage<Dictionary<string, string>> aliases,
         History history,
         Table table,
-        string shellFile)
+        string shellFile,
+        Settings settings,
+        string settingsFile,
+        IStorage<Settings> settingsStorage)
     {
         _history = history;
         var data = new[]
@@ -58,7 +61,13 @@ public class Commander : ICommander
                 () => new Help(this, table),
                 "Shows information about all commands.",
                 "nav --help [command]",
-                ("command", "Command to show information for. If omited, shows information for all commands."))
+                ("command", "Command to show information for. If omited, shows information for all commands.")),
+            new CommandData(
+                "--change-settings",
+                "-cs",
+                () => new ChangeSettings(settings, settingsFile, settingsStorage),
+                "Opens a json file in the text editor where you can adjust some settings.",
+                "nav --change-settings")
         };
 
         _commands = new Dictionary<string, CommandData>();
