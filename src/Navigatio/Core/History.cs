@@ -6,10 +6,12 @@ namespace Navigatio;
 public class History
 {
     private readonly IPopulator<LinkedList<(string, object)>> _storage;
+    private readonly int _limit;
 
-    public History(IPopulator<LinkedList<(string, object)>> storage)
+    public History(IPopulator<LinkedList<(string, object)>> storage, int limit)
     {
         _storage = storage;
+        _limit = limit;
     }
 
     public void Push(string name, ICancellable command)
@@ -17,6 +19,7 @@ public class History
         _storage.Load(history =>
         {
             history.AddFirst((name, command));
+            EnsureLimited(history);
         });
     }
 
@@ -37,5 +40,13 @@ public class History
         });
 
         return command;
+    }
+
+    private void EnsureLimited(LinkedList<(string, object)> history)
+    {
+        while (history.Count > _limit)
+        {
+            history.RemoveLast();
+        }
     }
 }
