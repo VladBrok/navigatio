@@ -7,15 +7,13 @@ public class Move : IExecutable, ICancellable
 {
     private readonly string _outputFile;
     private readonly IStorage<Dictionary<string, string>> _aliasStorage;
-    private readonly Func<string, string> _getCdCommand;
+    private readonly Func<string, string> _cd;
 
     public Move(string outputFile, IStorage<Dictionary<string, string>> aliasStorage)
     {
         _outputFile = outputFile;
         _aliasStorage = aliasStorage;
-        _getCdCommand = Path.GetExtension(_outputFile) == ".sh"
-                        ? (path) => $"#!/usr/bin/env{Environment.NewLine}cd {path.Replace('\\', '/')}"
-                        : (path) => $"cd /d {path.Replace('/', '\\')}";
+        _cd = (path) => $"#!/usr/bin/env{Environment.NewLine}cd {Utils.FormatPath(path)}";
     }
 
     public string? OldPath { get; set; }
@@ -44,10 +42,13 @@ public class Move : IExecutable, ICancellable
         string? subfolder = ExtractSubfolder(ref alias);
         string? path = null;
 
-        _aliasStorage.Load(aliases =>
-        {
-            aliases.TryGetValue(alias, out path);
-        }, modifiesData: false);
+        _aliasStorage.Load(
+            aliases =>
+            {
+                aliases.TryGetValue(alias, out path);
+            },
+            modifiesData: false
+        );
 
         if (path is null)
         {
@@ -62,7 +63,7 @@ public class Move : IExecutable, ICancellable
     private void MoveToPath(string path)
     {
         using var writer = new StreamWriter(_outputFile);
-        writer.WriteLine(_getCdCommand(path));
+        writer.WriteLine(_cd(path));
     }
 
     private static string? ExtractSubfolder(ref string alias)

@@ -16,19 +16,23 @@ public class Show : IExecutable
     public bool Execute(params string[] _)
     {
         Console.WriteLine();
-        _aliasStorage.Load(aliases =>
-        {
-            if (!aliases.Any())
+        _aliasStorage.Load(
+            aliases =>
             {
-                Console.WriteLine("Aliases not found.");
-                return;
-            }
-            _table.Print(
-                aliases.Keys,
-                aliases.Values,
-                columnGap: 4,
-                marginLeft: 2);
-        }, modifiesData: false);
+                if (!aliases.Any())
+                {
+                    Console.WriteLine("Aliases not found.");
+                    return;
+                }
+                _table.Print(
+                    aliases.Keys,
+                    aliases.Values.Select(x => Utils.FormatPath(x)),
+                    columnGap: 4,
+                    marginLeft: 2
+                );
+            },
+            modifiesData: false
+        );
         return true;
     }
 }
