@@ -1,10 +1,9 @@
 #!/usr/bin/env
 
 ROOT=/usr/local/bin/navigatio
-EXE_PATH=src/navigatio/bin/debug/net6.0/
+EXE_PATH=$1
 
 mkdir -p $ROOT
-cp nav.sh $ROOT
 cp -r ${EXE_PATH}. $ROOT
 chmod +x ${ROOT}/nav.sh
 

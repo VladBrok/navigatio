@@ -13,6 +13,9 @@
 
   <ItemGroup>
     <None Include="../../settings.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../nav.sh" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../release-setup.sh" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../setup.sh" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

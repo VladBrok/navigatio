@@ -8,7 +8,6 @@ nupkg/
 
 # Visual Studio Code
 .vscode
-dev-build.sh
 
 # Rider
 .idea
