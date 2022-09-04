@@ -23,19 +23,21 @@ public class Delete : IExecutable, ICancellable
         }
 
         string alias = args[0];
-        _aliasStorage.Load(aliases =>
-        {
-            if (!aliases.ContainsKey(alias))
+        _aliasStorage.Load(
+            aliases =>
             {
-                Console.WriteLine($"Alias '{alias}' not found.");
-                return;
-            }
+                if (!aliases.ContainsKey(alias))
+                {
+                    Console.WriteLine($"Alias '{alias}' not found.");
+                    return;
+                }
 
-            Alias = alias;
-            Path = aliases[alias];
-            aliases.Remove(alias);
-            Console.WriteLine($"Alias '{alias}' deleted. It pointed to '{Path}'.");
-        });
+                Alias = alias;
+                Path = aliases[alias];
+                aliases.Remove(alias);
+                Console.WriteLine($"Alias '{alias}' deleted. It pointed to '{Path}'.");
+            }
+        );
 
         return Alias is not null;
     }
@@ -44,10 +46,12 @@ public class Delete : IExecutable, ICancellable
     {
         Debug.Assert(Alias is not null && Path is not null);
 
-        _aliasStorage.Load(aliases =>
-        {
-            aliases.Add(Alias, Path);
-            Console.WriteLine($"Alias '{Alias}' added. It points to '{Path}'.");
-        });
+        _aliasStorage.Load(
+            aliases =>
+            {
+                aliases.Add(Alias, Path);
+                Console.WriteLine($"Alias '{Alias}' added. It points to '{Path}'.");
+            }
+        );
     }
 }

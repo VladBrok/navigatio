@@ -16,14 +16,16 @@ public class Undo : IExecutable
     public bool Execute(params string[] _)
     {
         string? commandName = null;
-        ICancellable? last = _history.Pop(name =>
-        {
-            CommandData? c = _commander.Get(name);
-            Debug.Assert(c is not null);
+        ICancellable? last = _history.Pop(
+            name =>
+            {
+                CommandData? c = _commander.Get(name);
+                Debug.Assert(c is not null);
 
-            commandName = c.Name;
-            return c.Executor();
-        });
+                commandName = c.Name;
+                return c.Executor();
+            }
+        );
 
         if (last is null)
         {

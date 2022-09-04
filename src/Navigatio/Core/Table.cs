@@ -6,7 +6,8 @@ public class Table
         IEnumerable<string> firstColumn,
         IEnumerable<string> secondColumn,
         int columnGap = 2,
-        int marginLeft = 2)
+        int marginLeft = 2
+    )
     {
         int maxWidth = firstColumn.Max(x => x.Length) + marginLeft;
         var gap = new string(' ', columnGap);

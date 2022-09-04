@@ -2,8 +2,6 @@
 using Navigatio.Storages;
 using static System.IO.Path;
 
-// TODO: format with csharpier
-
 string exePath = AppContext.BaseDirectory;
 string settingsFile = Join(exePath, "settings.json");
 

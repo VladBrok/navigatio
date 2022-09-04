@@ -14,7 +14,8 @@ public class Commander : ICommander
         Table table,
         string shellFile,
         Settings settings,
-        IStorage<Settings> settingsStorage)
+        IStorage<Settings> settingsStorage
+    )
     {
         _history = history;
         var data = new[]
@@ -25,48 +26,64 @@ public class Commander : ICommander
                 () => new Add(aliases),
                 "Adds a new alias for the specified path. If the same alias already exists, overwrites an old path.",
                 "nav --add [alias] [path]",
-                ("alias", "An alias for the path. It cannot start with '-' and cannot contain '\\' or '/'."),
-                ("path", "A full, valid path to the folder. If a folder does not exist, it will be created. " +
-                         "To take a current path simply write . (dot).")),
+                (
+                    "alias",
+                    "An alias for the path. It cannot start with '-' and cannot contain '\\' or '/'."
+                ),
+                (
+                    "path",
+                    "A full, valid path to the folder. If a folder does not exist, it will be created. "
+                        + "To take a current path simply write . (dot)."
+                )
+            ),
             new CommandData(
                 "--del",
                 "-d",
                 () => new Delete(aliases),
                 "Removes an alias if it exists.",
                 "nav --del [alias]",
-                ("alias", "An alias to delete.")),
+                ("alias", "An alias to delete.")
+            ),
             new CommandData(
                 "--move",
                 "-m",
                 () => new Move(shellFile, aliases),
                 "Performs cd to the path indicated by the alias.",
                 "nav [alias]",
-                ("alias", "An alias for the path.")),
+                ("alias", "An alias for the path.")
+            ),
             new CommandData(
                 "--show",
                 "-s",
                 () => new Show(aliases, table),
                 "Shows all aliases and the paths they point to.",
-                "nav --show"),
+                "nav --show"
+            ),
             new CommandData(
                 "--undo",
                 "-u",
                 () => new Undo(this, history),
                 "Cancels the last command. Redo is not supported.",
-                "nav --undo"),
+                "nav --undo"
+            ),
             new CommandData(
                 "--help",
                 "-h",
                 () => new Help(this, table),
                 "Shows information about all commands.",
                 "nav --help [command]",
-                ("command", "Command to show information for. If omited, shows information for all commands.")),
+                (
+                    "command",
+                    "Command to show information for. If omited, shows information for all commands."
+                )
+            ),
             new CommandData(
                 "--change-settings",
                 "-cs",
                 () => new ChangeSettings(settings, settingsStorage),
                 "Opens a json file in the text editor where you can adjust some settings.",
-                "nav --change-settings")
+                "nav --change-settings"
+            )
         };
 
         _commands = new Dictionary<string, CommandData>();
@@ -115,9 +132,7 @@ public class Commander : ICommander
 
     private (string name, string[] arguments) ExtractCommandInfo(string[] args)
     {
-        return _commands.ContainsKey(args[0])
-               ? (args[0], args[1..])
-               : ("--move", args);
+        return _commands.ContainsKey(args[0]) ? (args[0], args[1..]) : ("--move", args);
     }
 
     private void ExecuteCommand(string name, string[] arguments)

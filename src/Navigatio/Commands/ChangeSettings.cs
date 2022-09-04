@@ -28,7 +28,9 @@ public class ChangeSettings : IExecutable, ICancellable
         }
         catch
         {
-            Console.WriteLine($"Failed to open your favorite editor ({OldSettings.FavoriteEditor}).");
+            Console.WriteLine(
+                $"Failed to open your favorite editor ({OldSettings.FavoriteEditor})."
+            );
             return false;
         }
 
@@ -40,10 +42,12 @@ public class ChangeSettings : IExecutable, ICancellable
 
     public void Cancel()
     {
-        _storage.Load(settings =>
-        {
-            OldSettings.ShallowCopyTo(settings);
-            Console.WriteLine("Settings are changed.");
-        });
+        _storage.Load(
+            settings =>
+            {
+                OldSettings.ShallowCopyTo(settings);
+                Console.WriteLine("Settings are changed.");
+            }
+        );
     }
 }

@@ -1,5 +1,3 @@
 namespace Navigatio;
 
-public class CommandUsageException : Exception
-{
-}
+public class CommandUsageException : Exception { }

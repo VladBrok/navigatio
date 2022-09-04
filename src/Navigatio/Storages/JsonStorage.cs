@@ -3,18 +3,14 @@ using static System.IO.File;
 
 namespace Navigatio.Storages;
 
-public class JsonStorage<T> : IStorage<T>, IPopulator<T>
-    where T : notnull, new()
+public class JsonStorage<T> : IStorage<T>, IPopulator<T> where T : notnull, new()
 {
     private readonly JsonSerializerSettings _settings;
 
     public JsonStorage(string file)
     {
         File = file;
-        _settings = new()
-        {
-            NullValueHandling = NullValueHandling.Ignore
-        };
+        _settings = new() { NullValueHandling = NullValueHandling.Ignore };
     }
 
     public string File { get; init; }

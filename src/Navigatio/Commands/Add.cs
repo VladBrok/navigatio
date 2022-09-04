@@ -23,9 +23,7 @@ public class Add : IExecutable, ICancellable
             throw new CommandUsageException();
         }
 
-        string path = args[1] == "."
-                      ? Directory.GetCurrentDirectory()
-                      : args[1];
+        string path = args[1] == "." ? Directory.GetCurrentDirectory() : args[1];
         try
         {
             if (!Directory.Exists(path))
@@ -41,18 +39,20 @@ public class Add : IExecutable, ICancellable
         }
 
         string alias = args[0];
-        _aliasStorage.Load(aliases =>
-        {
-            if (aliases.TryAdd(alias, path))
+        _aliasStorage.Load(
+            aliases =>
             {
-                Console.WriteLine($"Alias '{alias}' added.");
-                return;
-            }
+                if (aliases.TryAdd(alias, path))
+                {
+                    Console.WriteLine($"Alias '{alias}' added.");
+                    return;
+                }
 
-            OldPath = aliases[alias];
-            aliases[alias] = path;
-            Console.WriteLine($"Alias '{alias}' updated. Previously pointed to '{OldPath}'.");
-        });
+                OldPath = aliases[alias];
+                aliases[alias] = path;
+                Console.WriteLine($"Alias '{alias}' updated. Previously pointed to '{OldPath}'.");
+            }
+        );
 
         Alias = alias;
         return true;
@@ -62,17 +62,19 @@ public class Add : IExecutable, ICancellable
     {
         Debug.Assert(Alias is not null);
 
-        _aliasStorage.Load(aliases =>
-        {
-            if (OldPath is null)
+        _aliasStorage.Load(
+            aliases =>
             {
-                aliases.Remove(Alias);
-                Console.WriteLine($"Alias {Alias} deleted.");
-                return;
-            }
+                if (OldPath is null)
+                {
+                    aliases.Remove(Alias);
+                    Console.WriteLine($"Alias {Alias} deleted.");
+                    return;
+                }
 
-            aliases[Alias] = OldPath;
-            Console.WriteLine($"Alias '{Alias}' updated. Now points to '{OldPath}'.");
-        });
+                aliases[Alias] = OldPath;
+                Console.WriteLine($"Alias '{Alias}' updated. Now points to '{OldPath}'.");
+            }
+        );
     }
 }

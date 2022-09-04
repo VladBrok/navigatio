@@ -51,7 +51,8 @@ public class Help : IExecutable
             c.Arguments.Select(x => x.Item1),
             c.Arguments.Select(x => x.Item2),
             columnGap: 4,
-            marginLeft: 6);
+            marginLeft: 6
+        );
     }
 
     private static void WriteWithMargin(string msg)

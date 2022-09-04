@@ -16,28 +16,32 @@ public class History
 
     public void Push(string name, ICancellable command)
     {
-        _storage.Load(history =>
-        {
-            history.AddFirst((name, command));
-            EnsureLimited(history);
-        });
+        _storage.Load(
+            history =>
+            {
+                history.AddFirst((name, command));
+                EnsureLimited(history);
+            }
+        );
     }
 
     public ICancellable? Pop(Func<string, IExecutable> getCommand)
     {
         ICancellable? command = null;
-        _storage.Load(history =>
-        {
-            if (!history.Any())
+        _storage.Load(
+            history =>
             {
-                return;
-            }
+                if (!history.Any())
+                {
+                    return;
+                }
 
-            (string name, object data) = history.First();
-            history.RemoveFirst();
-            command = (ICancellable)getCommand(name);
-            _storage.Populate(command, data);
-        });
+                (string name, object data) = history.First();
+                history.RemoveFirst();
+                command = (ICancellable)getCommand(name);
+                _storage.Populate(command, data);
+            }
+        );
 
         return command;
     }

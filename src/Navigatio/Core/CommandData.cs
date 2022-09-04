@@ -10,7 +10,8 @@ public class CommandData
         Func<IExecutable> executor,
         string description,
         string usage,
-        params (string, string)[] arguments)
+        params (string, string)[] arguments
+    )
     {
         Name = name;
         ShortName = shortName;
