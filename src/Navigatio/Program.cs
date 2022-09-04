@@ -2,9 +2,6 @@
 using Navigatio.Storages;
 using static System.IO.Path;
 
-// TODO:
-// make cleanup, test
-
 string exePath = AppContext.BaseDirectory;
 string settingsFile = Join(exePath, "settings.json");
 
