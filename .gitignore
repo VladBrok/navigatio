@@ -1,4 +1,4 @@
-
+*.zip
 *.swp
 *.*~
 project.lock.json
