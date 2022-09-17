@@ -3,10 +3,13 @@
 PROJECT_DIR=src/navigatio
 BASE_DIR=${PROJECT_DIR}/bin/Release
 
-rm -rf ${BASE_DIR}/win-x86 && \
-dotnet publish $PROJECT_DIR --configuration Release --output ${BASE_DIR}/win-x86 --runtime win-x86 --self-contained true && \
-powershell Compress-Archive -Path "'${BASE_DIR}/win-x86/*'" -DestinationPath 'win-x86.zip' -Force
+function release_for_os() {
+  rm -rf ${BASE_DIR}/$1 && \
 
-rm -rf ${BASE_DIR}/win-x64 && \
-dotnet publish $PROJECT_DIR --configuration Release --output ${BASE_DIR}/win-x64 --runtime win-x64 --self-contained true && \
-powershell Compress-Archive -Path "'${BASE_DIR}/win-x64/*'" -DestinationPath 'win-x64.zip' -Force
+  dotnet publish $PROJECT_DIR --configuration Release --output ${BASE_DIR}/$1 --runtime $1 --self-contained true && \
+
+  powershell Compress-Archive -Path "'${BASE_DIR}/$1/*'" -DestinationPath "$1.zip" -Force
+}
+
+release_for_os win-x86
+release_for_os win-x64
