@@ -1,4 +1,4 @@
-#!/usr/bin/env
+#!/usr/bin/env bash
 
 PROJECT_DIR=src/navigatio
 BASE_DIR=${PROJECT_DIR}/bin/Release
@@ -13,3 +13,4 @@ function release_for_os() {
 
 release_for_os win-x86
 release_for_os win-x64
+release_for_os linux-x64
