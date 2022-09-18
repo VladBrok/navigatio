@@ -1,12 +1,16 @@
-#!/usr/bin/env
+#!/usr/bin/env bash
 
 PROJECT_DIR=src/navigatio
 BASE_DIR=${PROJECT_DIR}/bin/Release
 
-rm -rf ${BASE_DIR}/x86 && \
-dotnet publish $PROJECT_DIR -c Release -o ${BASE_DIR}/x86 -a x86 --sc true && \
-powershell Compress-Archive -Path "'${BASE_DIR}/x86/*'" -DestinationPath 'windows-x86.zip' -Force
+function release_for_os() {
+  rm -rf ${BASE_DIR}/$1 && \
 
-rm -rf ${BASE_DIR}/x64 && \
-dotnet publish $PROJECT_DIR -c Release -o ${BASE_DIR}/x64 -a x64 --sc true && \
-powershell Compress-Archive -Path "'${BASE_DIR}/x64/*'" -DestinationPath 'windows-x64.zip' -Force
+  dotnet publish $PROJECT_DIR --configuration Release --output ${BASE_DIR}/$1 --runtime $1 --self-contained true && \
+
+  powershell Compress-Archive -Path "'${BASE_DIR}/$1/*'" -DestinationPath "$1.zip" -Force
+}
+
+release_for_os win-x86
+release_for_os win-x64
+release_for_os linux-x64

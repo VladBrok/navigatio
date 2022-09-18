@@ -13,6 +13,8 @@ Fast navigation between directories
 - [Introduction](#introduction)
 - [Features](#features)
 - [Installation](#installation)
+  - [Linux](#linux)
+  - [Windows](#windows)
 - [Usage](#usage)
 - [License](#license)
 
@@ -27,19 +29,35 @@ If you use a terminal and you need to move between directories frequently, then 
 
 ## Installation
 
-1. Download and install [git](https://git-scm.com/download/win) (you'll need a git bash in order to use the app)
+### Linux
 
-2. Download and unpack the latest [release](https://github.com/VladBrok/navigatio/releases) for your specific platform
+1. Download and unpack the latest [release](https://github.com/VladBrok/navigatio/releases) for linux (file linux-x64.zip)
 
-_By now, only Windows is supported_
-
-3. Run the setup
+2. Open the folder with unpacked files in the terminal and run the setup
 
 ```bash
-source release-setup.sh
+sudo chmod +x setup.sh && ./setup.sh ./
 ```
 
-Now you can run `nav -h` for a list of all available commands
+3. Restart the terminal
+
+Done! Now you can run `nav -h` for a list of all available commands
+
+### Windows
+
+1. Download and install [git](https://git-scm.com/download/win) (you'll need a git bash in order to use the app)
+
+2. Download and unpack the latest [release](https://github.com/VladBrok/navigatio/releases) for your specific architecture (win-x64.zip or win-x86.zip)
+
+3. Open the folder with unpacked files in the git bash and run the setup
+
+```bash
+./setup.sh ./
+```
+
+4. Restart the git bash
+
+Done! Now you can run `nav -h` for a list of all available commands
 
 ## Usage
 
