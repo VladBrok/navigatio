@@ -36,8 +36,7 @@ If you use a terminal and you need to move between directories frequently, then 
 2. Open the folder with unpacked files in the terminal and run the setup
 
 ```bash
-sudo chmod +x setup.sh
-./setup.sh ./
+sudo chmod +x setup.sh && ./setup.sh ./
 ```
 
 3. Restart the terminal
