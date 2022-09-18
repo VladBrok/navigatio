@@ -13,6 +13,8 @@ Fast navigation between directories
 - [Introduction](#introduction)
 - [Features](#features)
 - [Installation](#installation)
+  - [Linux](#linux)
+  - [Windows](#windows)
 - [Usage](#usage)
 - [License](#license)
 
