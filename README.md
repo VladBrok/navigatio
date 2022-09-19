@@ -64,6 +64,7 @@ Done! Now you can run `nav -h` for a list of all available commands
 Navigation:
 
 - `nav <alias>` Navigate to this alias
+- `nav <alias>/<subfolder>` Navigate to a subfolder of the alias
 
 Managing aliases:
 

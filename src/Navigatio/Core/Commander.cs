@@ -48,7 +48,7 @@ public class Commander : ICommander
                 "--move",
                 "-m",
                 () => new Move(shellFile, aliases),
-                "Performs cd to the path indicated by the alias.",
+                "Performs cd to the path indicated by the alias. You can also specify subfolders, for example: nav my-alias/some-subfolder",
                 "nav [alias]",
                 ("alias", "An alias for the path.")
             ),
