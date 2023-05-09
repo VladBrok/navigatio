@@ -2,7 +2,7 @@
 
 # Navigatio
 
-[![video demonstration](images/preview.png)](https://screenrec.com/share/RJh5qOrtn0)
+![video demonstration](assets/videos/demo.gif)
 
 Fast navigation between directories
 
