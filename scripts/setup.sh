@@ -26,13 +26,12 @@ function set_permissions() {
 }
 
 function create_alias() {
-  echo "" >> ~/.bashrc
-  echo "alias nav='source ${ROOT}/nav.sh ${ROOT} ${ROOT}/output.sh'" >> ~/.bashrc
+  echo "" >>~/.bashrc
+  echo "alias nav='source ${ROOT}/nav.sh ${ROOT} ${ROOT}/output.sh'" >>~/.bashrc
 }
 
 unamestr=$(uname)
-if [[ "$unamestr" == 'Linux' ]]
-then
+if [[ "$unamestr" == 'Linux' ]]; then
   sudo_create_dir
   set_permissions
 else
