@@ -15,6 +15,7 @@
     <None Include="../../settings.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../scripts/nav.sh" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../scripts/setup.sh" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../scripts/navigatio-completions.sh" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

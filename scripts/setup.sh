@@ -8,6 +8,10 @@ function create_dir() {
   cp -r ${EXE_PATH}. $ROOT
 }
 
+function setup_autocompletion() {
+  sudo cp ${EXE_PATH}navigatio-completions.sh /etc/bash_completion.d/
+}
+
 function sudo_create_dir() {
   sudo -E bash -c "$(declare -f create_dir); create_dir"
 }
@@ -34,6 +38,7 @@ unamestr=$(uname)
 if [[ "$unamestr" == 'Linux' ]]; then
   sudo_create_dir
   set_permissions
+  setup_autocompletion
 else
   create_dir
 fi

@@ -12,3 +12,4 @@ _extract_keys_from_json() {
 }
 
 complete -F _navigatio_completions nav
+complete -F _navigatio_completions n
