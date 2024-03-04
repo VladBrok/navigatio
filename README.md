@@ -20,12 +20,13 @@ Fast navigation between directories
 
 ## Introduction
 
-If you use a terminal and you need to move between directories frequently, then this application is for you! Define aliases and use them to quickly navigate between directories. If you accidentally used the wrong command, don't worry. The cancellation command `nav -u` will take care of this!
+If you use a **terminal** and you need to move between directories frequently, then this application is for you! Define aliases and use them to **quickly navigate between directories**. \
+If you accidentally used the wrong command, don't worry. The cancellation command `nav -u` will take care of this!
 
 ## Features
 
-- Create aliases for directories and navigate to them quickly
-- Cancel previous actions
+- **Create aliases** for directories and **navigate to them quickly**
+- **Cancel** previous actions
 
 ## Installation
 
